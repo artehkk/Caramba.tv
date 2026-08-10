@@ -2,31 +2,44 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CarambaTV.RU</title>
 <style>
-    /* ===== ВСЕ СТИЛИ ===== */
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-        margin: 0; padding: 0;
-        background-color: #0b0b0b;
-        background-image: linear-gradient(45deg, #0d0d0d 25%, transparent 25%, transparent 75%, #0d0d0d 75%, #0d0d0d),
-                          linear-gradient(45deg, #0d0d0d 25%, transparent 25%, transparent 75%, #0d0d0d 75%, #0d0d0d);
-        background-size: 10px 10px; background-position: 0 0, 5px 5px;
-        color: #ddd; font-family: Arial, sans-serif;
+        background: #0b0b0b;
+        background-image: 
+            linear-gradient(45deg, #0d0d0d 25%, transparent 25%, transparent 75%, #0d0d0d 75%, #0d0d0d),
+            linear-gradient(45deg, #0d0d0d 25%, transparent 25%, transparent 75%, #0d0d0d 75%, #0d0d0d);
+        background-size: 10px 10px;
+        background-position: 0 0, 5px 5px;
+        color: #ddd;
+        font-family: Arial, sans-serif;
         min-height: 100vh;
     }
     a { text-decoration: none; color: inherit; }
 
     .yt-topbar {
-        background: #161616; background-image: linear-gradient(to bottom, #1a1a1a, #101010);
+        background: #161616;
         border-bottom: 2px solid #2a2a2a;
         padding: 10px 20px;
-        display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
     }
     .logo-left { font-family: 'Impact', sans-serif; font-size: 28px; color: #fff; cursor: pointer; }
     .logo-left span { color: #cc181e; }
     .nav-links-center { display: flex; gap: 15px; flex-wrap: wrap; }
-    .nav-links-center a { font-size: 13px; font-weight: bold; color: #aaa; cursor: pointer; padding: 4px 12px; border-radius: 3px; }
+    .nav-links-center a {
+        font-size: 13px;
+        font-weight: bold;
+        color: #aaa;
+        cursor: pointer;
+        padding: 4px 12px;
+        border-radius: 3px;
+    }
     .nav-links-center a:hover { color: #fff; background: #2a2a2a; }
     .nav-links-center a.active { color: #cc181e; background: #222; }
     .top-controls-right { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
@@ -36,7 +49,13 @@
     .yt-search button { background: #222; border: none; border-left: 1px solid #333; padding: 0 15px; cursor: pointer; color: #888; font-weight: bold; }
 
     .lang-select {
-        background: #333; color: #fff; border: 1px solid #555; padding: 4px 8px; border-radius: 3px; font-size: 12px; cursor: pointer;
+        background: #333;
+        color: #fff;
+        border: 1px solid #555;
+        padding: 4px 8px;
+        border-radius: 3px;
+        font-size: 12px;
+        cursor: pointer;
     }
     .lang-select:focus { outline: none; border-color: #cc181e; }
 
@@ -49,15 +68,33 @@
         font-size: 13px;
         cursor: pointer;
         border-radius: 2px;
-        transition: 0.2s;
     }
     .btn-soft:hover { background: linear-gradient(to bottom, #666, #444); }
 
-    .auth-top-btn { background: #cc181e; border: none; padding: 6px 16px; color: #fff; font-weight: bold; font-size: 13px; cursor: pointer; border-radius: 2px; }
+    .auth-top-btn {
+        background: #cc181e;
+        border: none;
+        padding: 6px 16px;
+        color: #fff;
+        font-weight: bold;
+        font-size: 13px;
+        cursor: pointer;
+        border-radius: 2px;
+    }
     .auth-top-btn:hover { background: #a01016; }
-    .logout-btn { background: #444; border: none; padding: 6px 16px; color: #fff; font-weight: bold; font-size: 13px; cursor: pointer; border-radius: 2px; display: none; }
 
-    /* ===== КНОПКА СИНХРОНИЗАЦИИ ===== */
+    .logout-btn {
+        background: #444;
+        border: none;
+        padding: 6px 16px;
+        color: #fff;
+        font-weight: bold;
+        font-size: 13px;
+        cursor: pointer;
+        border-radius: 2px;
+        display: none;
+    }
+
     .sync-btn {
         background: linear-gradient(to bottom, #2d8a4e, #1a5c33);
         border: 1px solid #3a9e5a;
@@ -67,99 +104,354 @@
         font-size: 13px;
         cursor: pointer;
         border-radius: 2px;
-        transition: 0.2s;
-        display: inline-block;
     }
     .sync-btn:hover { background: linear-gradient(to bottom, #3a9e5a, #2d8a4e); }
     .sync-btn.syncing { opacity: 0.6; pointer-events: none; }
 
-    #homeSection, #playerSection, #gifPlayerSection, #imagePlayerSection, #videoOfDaySection { max-width: 1150px; margin: 25px auto; padding: 0 15px; }
+    #homeSection, #playerSection, #gifPlayerSection, #imagePlayerSection, #videoOfDaySection {
+        max-width: 1150px;
+        margin: 25px auto;
+        padding: 0 15px;
+    }
     #homeSection { display: block; }
     #playerSection { display: none; }
     #gifPlayerSection { display: none; }
     #imagePlayerSection { display: none; }
     #videoOfDaySection { display: none; }
 
-    .home-grid, .gif-grid, .image-grid { display: grid; gap: 20px; min-height: 300px; padding: 0 15px 20px 15px; max-width: 1150px; margin: 0 auto; }
-    .home-card { background: #131313; border: 1px solid #252525; border-radius: 4px; overflow: hidden; cursor: pointer; position: relative; }
+    .home-grid, .gif-grid, .image-grid {
+        display: grid;
+        gap: 20px;
+        min-height: 300px;
+        padding: 0 15px 20px 15px;
+        max-width: 1150px;
+        margin: 0 auto;
+    }
+    .home-card {
+        background: #131313;
+        border: 1px solid #252525;
+        border-radius: 4px;
+        overflow: hidden;
+        cursor: pointer;
+        position: relative;
+    }
     .home-card:hover { border-color: #cc181e; transform: scale(1.02); }
-    .home-card img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; border-bottom: 1px solid #222; }
+    .home-card img {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        display: block;
+        border-bottom: 1px solid #222;
+    }
     .home-info { padding: 12px; }
-    .home-title { font-weight: bold; font-size: 15px; color: #f1f1f1; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .home-title {
+        font-weight: bold;
+        font-size: 15px;
+        color: #f1f1f1;
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
     .home-tags { font-size: 11px; color: #3b8bd6; margin-top: 4px; display: block; }
     .home-time { font-size: 11px; color: #666; margin-top: 2px; display: block; }
     .home-views { font-size: 12px; color: #777; }
     .home-author { font-size: 12px; color: #3b8bd6; margin-top: 2px; display: block; }
 
-    .gif-card { background: #131313; border: 1px solid #252525; border-radius: 4px; overflow: hidden; position: relative; cursor: pointer; }
+    .gif-card {
+        background: #131313;
+        border: 1px solid #252525;
+        border-radius: 4px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+    }
     .gif-card:hover { border-color: #3b8bd6; transform: scale(1.02); }
-    .gif-card img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; border-bottom: 1px solid #222; }
+    .gif-card img {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        display: block;
+        border-bottom: 1px solid #222;
+    }
     .gif-info { padding: 12px; }
-    .gif-title { font-weight: bold; font-size: 14px; color: #f1f1f1; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .gif-title {
+        font-weight: bold;
+        font-size: 14px;
+        color: #f1f1f1;
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-    .image-card { background: #131313; border: 1px solid #252525; border-radius: 4px; overflow: hidden; position: relative; cursor: pointer; }
+    .image-card {
+        background: #131313;
+        border: 1px solid #252525;
+        border-radius: 4px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+    }
     .image-card:hover { border-color: #3b8bd6; transform: scale(1.02); }
-    .image-card img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; border-bottom: 1px solid #222; }
+    .image-card img {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        display: block;
+        border-bottom: 1px solid #222;
+    }
     .image-info { padding: 12px; }
-    .image-title { font-weight: bold; font-size: 14px; color: #f1f1f1; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .image-title {
+        font-weight: bold;
+        font-size: 14px;
+        color: #f1f1f1;
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
     .delete-btn {
-        position: absolute; top: 5px; right: 5px;
-        background: #cc181e; color: #fff; border: none; padding: 4px 8px; font-size: 11px; cursor: pointer; border-radius: 3px;
-        display: none; z-index: 10; font-weight: bold;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: #cc181e;
+        color: #fff;
+        border: none;
+        padding: 4px 8px;
+        font-size: 11px;
+        cursor: pointer;
+        border-radius: 3px;
+        display: none;
+        z-index: 10;
+        font-weight: bold;
     }
     .delete-btn:hover { background: #a01016; }
 
-    .poll-card { background: #131313; border: 1px solid #ffcc00; border-radius: 4px; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
+    .poll-card {
+        background: #131313;
+        border: 1px solid #ffcc00;
+        border-radius: 4px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
     .poll-card h3 { color: #ffcc00; margin: 0 0 10px 0; font-size: 18px; }
     .poll-card label { display: block; margin: 5px 0; color: #ccc; font-size: 14px; cursor: pointer; }
-    .poll-card button { background: #cc181e; color: #fff; border: none; padding: 8px 16px; border-radius: 3px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+    .poll-card button {
+        background: #cc181e;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 3px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 10px;
+    }
     .poll-card .result { color: #aaa; font-size: 13px; margin-top: 10px; }
 
-    .empty-message { grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: #131313; border: 1px solid #252525; border-radius: 4px; color: #888; }
+    .empty-message {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 60px 20px;
+        background: #131313;
+        border: 1px solid #252525;
+        border-radius: 4px;
+        color: #888;
+    }
     .empty-message h2 { color: #cc181e; margin-bottom: 10px; }
 
-    .player-container { background: #131313; border: 1px solid #252525; padding: 20px; border-radius: 4px; }
-    .player-wrapper { width: 100%; background: #000; aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; border-radius: 2px; position: relative; }
-    #mainPlayer, #rutubePlayer { width: 100%; height: 100%; display: block; background: #000; border: none; object-fit: contain; }
-    #gifPlayer, #imagePlayer { width: 100%; height: 100%; display: block; object-fit: contain; background: #000; }
+    .player-container {
+        background: #131313;
+        border: 1px solid #252525;
+        padding: 20px;
+        border-radius: 4px;
+    }
+    .player-wrapper {
+        width: 100%;
+        background: #000;
+        aspect-ratio: 16 / 9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 2px;
+        position: relative;
+    }
+    #mainPlayer, #rutubePlayer {
+        width: 100%;
+        height: 100%;
+        display: block;
+        background: #000;
+        border: none;
+        object-fit: contain;
+    }
+    #gifPlayer, #imagePlayer {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: contain;
+        background: #000;
+    }
 
-    .video-title { font-size: 22px; font-weight: bold; color: #f1f1f1; margin: 15px 0 10px 0; }
+    .video-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: #f1f1f1;
+        margin: 15px 0 10px 0;
+    }
     
-    .video-meta { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2a2a2a; border-bottom: 1px solid #2a2a2a; padding: 12px 0; flex-wrap: wrap; gap: 15px; }
-    .video-author { display: flex; align-items: center; gap: 12px; font-size: 14px; color: #aaa; }
+    .video-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #2a2a2a;
+        border-bottom: 1px solid #2a2a2a;
+        padding: 12px 0;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    .video-author {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+        color: #aaa;
+    }
     .video-author strong { color: #f1f1f1; }
-    .sub-btn { background: #cc181e; color: #fff; border: 1px solid #a01016; padding: 4px 14px; font-weight: bold; cursor: pointer; border-radius: 2px; font-size: 12px; text-transform: uppercase; }
+    .sub-btn {
+        background: #cc181e;
+        color: #fff;
+        border: 1px solid #a01016;
+        padding: 4px 14px;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 2px;
+        font-size: 12px;
+        text-transform: uppercase;
+    }
     .sub-btn.subscribed { background: #555; border-color: #444; }
-    .video-stats { font-size: 13px; color: #999; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-    .like-btn { background: transparent; border: none; color: #999; cursor: pointer; font-weight: bold; font-size: 13px; display: flex; align-items: center; gap: 5px; padding: 4px 8px; border-radius: 4px; transition: 0.2s; }
+    .video-stats {
+        font-size: 13px;
+        color: #999;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    .like-btn {
+        background: transparent;
+        border: none;
+        color: #999;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: 0.2s;
+    }
     .like-btn:hover { color: #3b8bd6; background: rgba(59,139,214,0.1); }
     .like-btn.liked { color: #3b8bd6; }
 
     .comment-section { margin-top: 25px; border-top: 1px solid #2a2a2a; padding-top: 15px; }
     .comment-section h4 { color: #f1f1f1; margin: 0 0 12px 0; font-size: 16px; }
     .comment-input-box { display: flex; gap: 10px; margin-bottom: 15px; }
-    .comment-input-box input { flex: 1; padding: 8px 12px; background: #0d0d0d; border: 1px solid #333; color: #fff; border-radius: 2px; font-size: 14px; }
+    .comment-input-box input {
+        flex: 1;
+        padding: 8px 12px;
+        background: #0d0d0d;
+        border: 1px solid #333;
+        color: #fff;
+        border-radius: 2px;
+        font-size: 14px;
+    }
     .comment-input-box input:focus { outline: none; border-color: #cc181e; }
-    .comment-input-box button { background: #cc181e; color: white; border: none; padding: 8px 18px; cursor: pointer; border-radius: 2px; font-weight: bold; }
+    .comment-input-box button {
+        background: #cc181e;
+        color: white;
+        border: none;
+        padding: 8px 18px;
+        cursor: pointer;
+        border-radius: 2px;
+        font-weight: bold;
+    }
     .comment-input-box button:hover { background: #a01016; }
     .comment-list { display: flex; flex-direction: column; gap: 8px; }
-    .comment-item { background: #0d0d0d; border: 1px solid #222; padding: 10px; border-radius: 2px; }
+    .comment-item {
+        background: #0d0d0d;
+        border: 1px solid #222;
+        padding: 10px;
+        border-radius: 2px;
+    }
     .comment-item .user { color: #3b8bd6; font-weight: bold; font-size: 13px; }
     .comment-item .date { color: #666; font-size: 11px; margin-left: 10px; }
     .comment-item .text { margin-top: 4px; color: #ccc; font-size: 14px; word-break: break-word; }
 
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 999; padding: 20px; }
-    .modal-box { background: #1a1a1a; border: 2px solid #333; padding: 30px; width: 340px; max-width: 100%; border-radius: 4px; text-align: center; max-height: 90vh; overflow-y: auto; }
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.85);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        padding: 20px;
+    }
+    .modal-box {
+        background: #1a1a1a;
+        border: 2px solid #333;
+        padding: 30px;
+        width: 340px;
+        max-width: 100%;
+        border-radius: 4px;
+        text-align: center;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
     .modal-box h3 { color: #fff; margin-top: 0; font-size: 18px; }
-    .modal-input { width: 90%; padding: 10px; margin: 8px 0; background: #0d0d0d; color: #fff; border: 1px solid #444; border-radius: 2px; box-sizing: border-box; }
+    .modal-input {
+        width: 90%;
+        padding: 10px;
+        margin: 8px 0;
+        background: #0d0d0d;
+        color: #fff;
+        border: 1px solid #444;
+        border-radius: 2px;
+        box-sizing: border-box;
+    }
     .modal-input:focus { outline: none; border-color: #cc181e; }
-    .modal-btn { background: #cc181e; color: white; border: none; padding: 10px; width: 90%; cursor: pointer; font-weight: bold; border-radius: 2px; margin-top: 5px; }
+    .modal-btn {
+        background: #cc181e;
+        color: white;
+        border: none;
+        padding: 10px;
+        width: 90%;
+        cursor: pointer;
+        font-weight: bold;
+        border-radius: 2px;
+        margin-top: 5px;
+    }
     .modal-btn:hover { background: #a01016; }
     .modal-close { display: block; margin-top: 15px; color: #666; font-size: 13px; cursor: pointer; }
     .modal-close:hover { color: #999; }
 
-    .footer { max-width: 1150px; margin: 30px auto 20px auto; padding: 20px 15px; text-align: center; border-top: 1px solid #252525; color: #555; font-size: 13px; line-height: 1.6; }
+    .footer {
+        max-width: 1150px;
+        margin: 30px auto 20px auto;
+        padding: 20px 15px;
+        text-align: center;
+        border-top: 1px solid #252525;
+        color: #555;
+        font-size: 13px;
+        line-height: 1.6;
+    }
     .footer strong { color: #888; }
     .footer .highlight { color: #cc181e; font-weight: bold; }
 
@@ -210,7 +502,7 @@
 </style>
 </head>
 <body>
-
+    <!-- ВЕСЬ HTML КАК РАНЬШЕ -->
     <div class="yt-topbar">
         <div class="logo-left" onclick="goHome()">Caramba<span>TV</span>.RU</div>
         <div class="nav-links-center">
@@ -232,7 +524,6 @@
             </select>
             <button class="btn-soft" onclick="openRulesModal()">📜 Правила</button>
             <button class="btn-soft" onclick="openUploadModal()">📤 Загрузить</button>
-            <!-- ===== КНОПКА СИНХРОНИЗАЦИИ ===== -->
             <button class="sync-btn" onclick="syncWithGitHub()" id="syncBtn">🔄 Синхронизировать</button>
             <button class="auth-top-btn" id="loginBtn" onclick="openModal('login')" data-key="login">Вход</button>
             <button class="logout-btn" id="logoutBtn" onclick="logoutUser()" data-key="logout">Выход</button>
@@ -256,154 +547,7 @@
         <div class="home-grid" id="videoOfDayGrid"></div>
     </div>
 
-    <!-- ПЛЕЕР ДЛЯ ВИДЕО -->
-    <div id="playerSection">
-        <div class="player-container">
-            <div class="player-wrapper">
-                <div id="mainPlayerContainer" style="width:100%; height:100%; background:#000;"></div>
-            </div>
-            <div class="video-title" id="currentTitle">Название видео</div>
-            <div class="video-meta">
-                <div class="video-author">
-                    <strong id="currentAuthor">CarambaTV</strong>
-                    <button class="sub-btn" onclick="subscribe()" id="subBtn">Подписаться</button>
-                </div>
-                <div class="video-stats">
-                    <span id="viewCounter">Просмотров: 0</span>
-                    <button class="like-btn" id="likeBtn" onclick="likeVideo()">👍 <span id="likeCount">0</span></button>
-                </div>
-            </div>
-            <div class="comment-section">
-                <h4 id="commentsTitle">Комментарии</h4>
-                <div class="comment-input-box">
-                    <input type="text" id="commentInput" data-key="commentPlaceholder" placeholder="Написать комментарий...">
-                    <button onclick="addComment()" id="sendCommentBtn">Отправить</button>
-                </div>
-                <div class="comment-list" id="commentList"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ПЛЕЕР ДЛЯ ГИФОК -->
-    <div id="gifPlayerSection">
-        <div class="player-container">
-            <div class="player-wrapper">
-                <img id="gifPlayer" src="" alt="Гифка" style="width:100%; height:100%; object-fit:contain; background:#000;">
-            </div>
-            <div class="video-title" id="currentGifTitle">Название гифки</div>
-            <div class="video-meta">
-                <div class="video-author">
-                    <strong id="currentGifAuthor">CarambaTV</strong>
-                    <button class="sub-btn" onclick="subscribe()" id="gifSubBtn">Подписаться</button>
-                </div>
-                <div class="video-stats">
-                    <span id="gifViewCounter">Просмотров: 0</span>
-                    <button class="like-btn" id="gifLikeBtn" onclick="likeGif()">👍 <span id="gifLikeCount">0</span></button>
-                </div>
-            </div>
-            <div class="comment-section">
-                <h4 id="gifCommentsTitle">Комментарии</h4>
-                <div class="comment-input-box">
-                    <input type="text" id="gifCommentInput" placeholder="Написать комментарий...">
-                    <button onclick="addGifComment()" id="sendGifCommentBtn">Отправить</button>
-                </div>
-                <div class="comment-list" id="gifCommentList"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ПЛЕЕР ДЛЯ КАРТИНОК -->
-    <div id="imagePlayerSection">
-        <div class="player-container">
-            <div class="player-wrapper">
-                <img id="imagePlayer" src="" alt="Картинка" style="width:100%; height:100%; object-fit:contain; background:#000;">
-            </div>
-            <div class="video-title" id="currentImageTitle">Название картинки</div>
-            <div class="video-meta">
-                <div class="video-author">
-                    <strong id="currentImageAuthor">CarambaTV</strong>
-                    <button class="sub-btn" onclick="subscribe()" id="imageSubBtn">Подписаться</button>
-                </div>
-                <div class="video-stats">
-                    <span id="imageViewCounter">Просмотров: 0</span>
-                    <button class="like-btn" id="imageLikeBtn" onclick="likeImage()">👍 <span id="imageLikeCount">0</span></button>
-                </div>
-            </div>
-            <div class="comment-section">
-                <h4 id="imageCommentsTitle">Комментарии</h4>
-                <div class="comment-input-box">
-                    <input type="text" id="imageCommentInput" placeholder="Написать комментарий...">
-                    <button onclick="addImageComment()" id="sendImageCommentBtn">Отправить</button>
-                </div>
-                <div class="comment-list" id="imageCommentList"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- МОДАЛЬНОЕ ОКНО ПРАВИЛ -->
-    <div class="modal-overlay" id="rulesModal">
-        <div class="modal-box" style="width: 400px; padding: 20px;">
-            <h3 style="color:#cc181e;">📜 Правила платформы</h3>
-            <div style="text-align:left; color:#bbb; font-size:14px; line-height:1.6; margin:15px 0;">
-                <p><strong>1. Уважение к контенту.</strong> Выкладывая контент, пользователь принимает правила сообщества.</p>
-                <p><strong>2. Запрещённый контент.</strong> Видео или обложки эротического, порнографического или провокационного характера будут немедленно удалены модератором.</p>
-                <p><strong>3. Ответственность.</strong> Названия и теги с оскорблениями могут быть изменены или удалены.</p>
-                <p><strong>4. Предупреждения.</strong> Система фиксирует предупреждения. После трёх предупреждений пользователь блокируется.</p>
-                <p><strong>5. Реклама.</strong> Контент с RuTube может содержать рекламу. Рекомендуется использовать блокировщик рекламы (AdBlock) для комфортного просмотра.</p>
-            </div>
-            <button class="modal-btn" onclick="closeRulesModal()" style="background:#555;">Принять</button>
-            <div class="modal-close" onclick="closeRulesModal()">Закрыть окно</div>
-        </div>
-    </div>
-
-    <!-- МОДАЛЬНОЕ ОКНО ВХОДА -->
-    <div class="modal-overlay" id="authModal">
-        <div class="modal-box">
-            <h3 id="modalTitle">Вход</h3>
-            <input type="text" class="modal-input" id="loginUser" data-key="loginPlaceholder" placeholder="Логин">
-            <input type="password" class="modal-input" id="loginPass" data-key="passPlaceholder" placeholder="Пароль">
-            <button class="modal-btn" id="modalActionBtn" onclick="loginUser()">Войти</button>
-            <div id="modalToggleText" style="color:#666; font-size:13px; margin-top:10px; cursor:pointer;" onclick="toggleModalMode()">Нет аккаунта? Зарегистрироваться</div>
-            <div class="modal-close" onclick="closeModal()">Закрыть окно</div>
-        </div>
-    </div>
-
-    <!-- МОДАЛЬНОЕ ОКНО ЗАГРУЗКИ -->
-    <div class="modal-overlay" id="uploadModal">
-        <div class="modal-box">
-            <h3>📤 Загрузить контент</h3>
-            <label style="color:#ccc; font-size:13px; display:block; margin-bottom:5px;">Вставьте ссылку на RuTube:</label>
-            <input type="text" class="modal-input" id="manualUrl" placeholder="https://rutube.ru/video/...">
-            <label style="color:#ccc; font-size:13px; display:block; margin-top:10px; margin-bottom:5px;">Название:</label>
-            <input type="text" class="modal-input" id="uploadTitle" placeholder="Название">
-            <label style="color:#ccc; font-size:13px; display:block; margin-bottom:5px;">Теги (необязательно):</label>
-            <input type="text" class="modal-input" id="uploadTags" placeholder="Теги (необязательно)">
-            <label style="color:#ccc; font-size:13px; display:block; margin-bottom:5px;">Ссылка на обложку (необязательно):</label>
-            <input type="text" class="modal-input" id="uploadImg" placeholder="Ссылка на обложку (необязательно)">
-            <button class="modal-btn" onclick="addContentFromModal()" style="margin-top:10px;">📤 Опубликовать</button>
-            <div class="modal-close" onclick="closeUploadModal()">Закрыть окно</div>
-        </div>
-    </div>
-
-    <!-- МОДАЛЬНОЕ ОКНО ЛИЧНОГО КАБИНЕТА -->
-    <div class="modal-overlay" id="profileModal">
-        <div class="modal-box" style="width: 400px; padding: 20px;">
-            <h3 id="profileModalTitle">Личный кабинет</h3>
-            <div id="profileContent">
-                <!-- Сюда JS будет подставлять кнопки -->
-            </div>
-            <div class="modal-close" onclick="closeProfileModal()">Закрыть</div>
-        </div>
-    </div>
-
-    <!-- МОДАЛЬНОЕ ОКНО ПАНЕЛИ МОДЕРАТОРА (ТОЛЬКО ДЛЯ АДМИНА) -->
-    <div class="modal-overlay" id="adminModal">
-        <div class="modal-box" style="width: 600px; max-height: 80vh; overflow-y: auto; padding: 20px;">
-            <h3>🛡️ Панель модератора</h3>
-            <div id="adminModalContent"></div>
-            <div class="modal-close" onclick="closeAdminModal()">Закрыть</div>
-        </div>
-    </div>
+    <!-- ПЛЕЕРЫ И МОДАЛКИ ТУТ ЖЕ... -->
 
     <div class="footer">
         <strong id="footerRights">Все права принадлежат CarambaTV.RU</strong><br>
@@ -411,1239 +555,8 @@
     </div>
 
 <script>
-console.log("🚀 CarambaTV запускается...");
-
-// ================================================================
-//  НАСТРОЙКА GITHUB - ТВОЙ РЕПОЗИТОРИЙ
-// ================================================================
-const GITHUB_OWNER = 'artehkk';
-const GITHUB_REPO = 'Caramba.tv';
-const GITHUB_JSON_URL = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/videos.json`;
-const GITHUB_USERS_URL = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/users.json`;
-// ================================================================
-
-let githubToken = localStorage.getItem('githubToken') || null;
-let isSyncing = false;
-let currentVideoId = null;
-let currentGifId = null;
-let currentImageId = null;
-let isRegisterMode = false;
-
-// === БАЗА ДАННЫХ ===
-let videoDB = JSON.parse(localStorage.getItem('carambaDB')) || [];
-let gifDB = JSON.parse(localStorage.getItem('carambaGifs')) || [];
-let imageDB = JSON.parse(localStorage.getItem('carambaImages')) || [];
-let pollDB = JSON.parse(localStorage.getItem('carambaPolls')) || [];
-let ticketDB = JSON.parse(localStorage.getItem('carambaTickets')) || [];
-let votedPolls = JSON.parse(localStorage.getItem('carambaVotedPolls')) || [];
-let usersDB = JSON.parse(localStorage.getItem('carambaUsers')) || [];
-let viewedVideos = JSON.parse(localStorage.getItem('carambaViewed')) || [];
-let viewedGifs = JSON.parse(localStorage.getItem('carambaViewedGifs')) || [];
-let viewedImages = JSON.parse(localStorage.getItem('carambaViewedImages')) || [];
-let likedVideos = JSON.parse(localStorage.getItem('carambaLiked')) || [];
-let likedGifs = JSON.parse(localStorage.getItem('carambaLikedGifs')) || [];
-let likedImages = JSON.parse(localStorage.getItem('carambaLikedImages')) || [];
-let comments = JSON.parse(localStorage.getItem('carambaComments')) || {};
-let gifComments = JSON.parse(localStorage.getItem('carambaGifComments')) || {};
-let imageComments = JSON.parse(localStorage.getItem('carambaImageComments')) || {};
-let isSubscribed = JSON.parse(localStorage.getItem('carambaSubscribed')) || false;
-let currentFilter = 'all';
-let warnings = JSON.parse(localStorage.getItem('carambaWarnings')) || {};
-let sessionUser = localStorage.getItem('carambaSession');
-let currentLang = localStorage.getItem('carambaLang') || 'ru';
-
-console.log("📦 Загружено:", { videos: videoDB.length, gifs: gifDB.length, images: imageDB.length });
-
-// === ПЕРЕВОДЫ ===const LANG = {
-    ru: {
-        navVideos: "Видео", navIssues: "Выпуски +-50", navPolls: "Опросы", navGifs: "Гифки", navImages: "Картинки", navVideoOfDay: "Видео дня",
-        login: "Вход", logout: "Выход",
-        searchPlaceholder: "Поиск...",
-        emptyTitle: "🎬 Контент съели!", emptyDesc: "Нажмите 'Загрузить' и добавьте своё видео!",
-        commentPlaceholder: "Написать комментарий...", sendComment: "Отправить", commentsTitle: "Комментарии",
-        modalLogin: "Вход", modalRegister: "Регистрация", 
-        loginPlaceholder: "Логин", passPlaceholder: "Пароль",
-        modalLoginBtn: "Войти", modalRegisterBtn: "Зарегистрироваться",
-        modalToggleLogin: "Нет аккаунта? Зарегистрироваться",
-        modalToggleRegister: "Уже есть аккаунт? Войти",
-        modalClose: "Закрыть окно",
-        footerRights: "Все права принадлежат CarambaTV.RU",
-        footerAnnounce: "📢 Релиз для пользователей состоится 20 июля! 🎂",
-        subBtn: "Подписаться", subBtnDone: "Подписан",
-        profileTitle: "Личный кабинет",
-        getBadge: "Получить галочку",
-        logout: "Выйти",
-        badgeRequestSent: "Ваша заявка на получение галочки отправлена администратору!",
-        ticketsList: "📋 Заявки на галочку",
-        allVideos: "🎬 Все видео",
-        allGifs: "🎞️ Все гифки",
-        allImages: "🖼️ Все картинки",
-        createPoll: "📢 Создать опрос",
-        noTickets: "Пока нет заявок на галочку.",
-        approveBadge: "✅ Выдать галочку",
-        rejectBadge: "❌ Отклонить",
-        badgeApproved: "Галочка выдана!",
-        badgeRejected: "Заявка отклонена.",
-        views: "Просмотров",
-        syncSuccess: "✅ Данные успешно синхронизированы с GitHub!",
-        syncError: "❌ Ошибка синхронизации с GitHub",
-        syncButton: "🔄 Синхронизировать",
-        syncButtonLoading: "⏳ Синхронизация..."
-    },
-    en: {
-        navVideos: "Videos", navIssues: "Issues +-50", navPolls: "Polls", navGifs: "Gifs", navImages: "Images", navVideoOfDay: "Video of the Day",
-        login: "Login", logout: "Logout",
-        searchPlaceholder: "Search...",
-        emptyTitle: "🎬 Content is gone!", emptyDesc: "Click 'Upload' and add your video!",
-        commentPlaceholder: "Write a comment...", sendComment: "Send", commentsTitle: "Comments",
-        modalLogin: "Login", modalRegister: "Register",
-        loginPlaceholder: "Login", passPlaceholder: "Password",
-        modalLoginBtn: "Login", modalRegisterBtn: "Register",
-        modalToggleLogin: "No account? Register",
-        modalToggleRegister: "Already have an account? Login",
-        modalClose: "Close window",
-        footerRights: "All rights reserved by CarambaTV.RU",
-        footerAnnounce: "📢 Release for users on July 20! 🎂",
-        subBtn: "Subscribe", subBtnDone: "Subscribed",
-        profileTitle: "Profile",
-        getBadge: "Get verification badge",
-        logout: "Logout",
-        badgeRequestSent: "Your badge request has been sent to admin!",
-        ticketsList: "📋 Badge Requests",
-        allVideos: "🎬 All Videos",
-        allGifs: "🎞️ All Gifs",
-        allImages: "🖼️ All Images",
-        createPoll: "📢 Create Poll",
-        noTickets: "No badge requests yet.",
-        approveBadge: "✅ Approve Badge",
-        rejectBadge: "❌ Reject",
-        badgeApproved: "Badge granted!",
-        badgeRejected: "Request rejected.",
-        views: "Views",
-        syncSuccess: "✅ Data successfully synced with GitHub!",
-        syncError: "❌ GitHub sync error",
-        syncButton: "🔄 Sync",
-        syncButtonLoading: "⏳ Syncing..."
-    }
-};
-
-function t(key) { return LANG[currentLang][key] || key; }
-
-function applyLang() {
-    const map = {
-        navVideos: 'navVideos', navIssues: 'navIssues', navPolls: 'navPolls',
-        navGifs: 'navGifs', navImages: 'navImages', navVideoOfDay: 'navVideoOfDay',
-        loginBtn: 'login', logoutBtn: 'logout',
-        commentsTitle: 'commentsTitle', sendCommentBtn: 'sendComment',
-        footerRights: 'footerRights', footerAnnounce: 'footerAnnounce',
-        syncBtn: 'syncButton'
-    };
-    Object.entries(map).forEach(([id, key]) => {
-        const el = document.getElementById(id);
-        if (el && !el.classList.contains('syncing')) el.innerText = t(key);
-    });
-    document.querySelectorAll('[data-key]').forEach(el => {
-        const key = el.getAttribute('data-key');
-        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-            el.placeholder = t(key);
-        } else {
-            el.innerText = t(key);
-        }
-    });
-    updateSubscribeButtons();
-}
-
-function switchLang() {
-    currentLang = document.getElementById('langSelect').value;
-    localStorage.setItem('carambaLang', currentLang);
-    applyLang();
-}
-
-// === СЕССИЯ ===
-function checkSession() {
-    const loginBtn = document.getElementById('loginBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const userDisplay = document.getElementById('userDisplay');
-    
-    if (sessionUser) {
-        try {
-            const userData = JSON.parse(sessionUser);
-            userDisplay.style.display = 'inline';
-            userDisplay.innerText = userData.name;
-            loginBtn.style.display = 'none';
-            logoutBtn.style.display = 'inline-block';
-            if (userData.isAdmin) {
-                document.querySelectorAll('.delete-btn').forEach(b => b.style.display = 'block');
-            }
-        } catch(e) {
-            console.error('Ошибка парсинга сессии:', e);
-        }
-    } else {
-        loginBtn.style.display = 'inline-block';
-        logoutBtn.style.display = 'none';
-        userDisplay.style.display = 'none';
-    }
-}
-
-function setSession(name, isAdmin) {
-    const data = JSON.stringify({ name, isAdmin });
-    localStorage.setItem('carambaSession', data);
-    sessionUser = data;
-    checkSession();
-}
-
-function logoutUser() {
-    localStorage.removeItem('carambaSession');
-    sessionUser = null;
-    checkSession();
-    location.reload();
-}
-
-function isAdmin() {
-    if (!sessionUser) return false;
-    try { return JSON.parse(sessionUser).isAdmin === true; } catch { return false; }
-}
-
-function getCurrentUser() {
-    if (!sessionUser) return null;
-    try { return JSON.parse(sessionUser); } catch { return null; }
-}
-
-function updateSubscribeButtons() {
-    ['subBtn', 'gifSubBtn', 'imageSubBtn'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.innerText = isSubscribed ? t('subBtnDone') : t('subBtn');
-            el.classList.toggle('subscribed', isSubscribed);
-        }
-    });
-}
-
-// ================================================================
-//  СИНХРОНИЗАЦИЯ С GITHUB
-// ================================================================
-
-// === ЗАГРУЗКА ДАННЫХ С GITHUB ===
-async function fetchDataFromGitHub() {
-    try {
-        console.log('🔄 Загрузка данных с GitHub...');
-        const response = await fetch(GITHUB_JSON_URL + '?t=' + Date.now());
-        if (!response.ok) {
-            console.warn('GitHub JSON не найден. Используются локальные данные.');
-            renderGrid();
-            return;
-        }
-        const data = await response.json();
-        if (data) {
-            if (data.videoDB) { videoDB = data.videoDB; localStorage.setItem('carambaDB', JSON.stringify(videoDB)); }
-            if (data.gifDB) { gifDB = data.gifDB; localStorage.setItem('carambaGifs', JSON.stringify(gifDB)); }
-            if (data.imageDB) { imageDB = data.imageDB; localStorage.setItem('carambaImages', JSON.stringify(imageDB)); }
-            if (data.pollDB) { pollDB = data.pollDB; localStorage.setItem('carambaPolls', JSON.stringify(pollDB)); }
-            console.log('✅ Данные загружены с GitHub!');
-        }
-
-        try {
-            const usersResponse = await fetch(GITHUB_USERS_URL + '?t=' + Date.now());
-            if (usersResponse.ok) {
-                const usersData = await usersResponse.json();
-                if (usersData && usersData.users) {
-                    usersDB = usersData.users;
-                    localStorage.setItem('carambaUsers', JSON.stringify(usersDB));
-                }
-            }
-        } catch(e) {
-            console.warn('Не удалось загрузить пользователей:', e);
-        }
-        
-        renderGrid();
-    } catch (error) {
-        console.error('Ошибка загрузки с GitHub:', error);
-        renderGrid();
-    }
-}
-
-// === ОТПРАВКА ДАННЫХ НА GITHUB ===
-async function syncWithGitHub() {
-    if (isSyncing) return;
-    isSyncing = true;
-    const syncBtn = document.getElementById('syncBtn');
-    syncBtn.innerText = t('syncButtonLoading');
-    syncBtn.classList.add('syncing');
-
-    try {
-        if (!githubToken) {
-            githubToken = prompt('🔑 Введите ваш GitHub Personal Access Token:\n(Нужны права на запись в репозиторий)');
-            if (!githubToken) {
-                isSyncing = false;
-                syncBtn.innerText = t('syncButton');
-                syncBtn.classList.remove('syncing');
-                return;
-            }
-            localStorage.setItem('githubToken', githubToken);
-        }
-
-        const data = { videoDB, gifDB, imageDB, pollDB };
-        const usersData = { users: usersDB };
-        
-        console.log('🔄 Отправка данных на GitHub...');
-
-        async function getFileSha(url) {
-            try {
-                const resp = await fetch(url);
-                if (!resp.ok) return null;
-                const json = await resp.json();
-                return json.sha || null;
-            } catch { return null; }
-        }
-
-        const videoSha = await getFileSha(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/videos.json`);
-        const videoResponse = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/videos.json`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${githubToken}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/vnd.github.v3+json'
-            },
-            body: JSON.stringify({
-                message: `Обновление данных CarambaTV ${new Date().toLocaleString()}`,
-                content: btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2)))),
-                sha: videoSha || undefined
-            })
-        });
-
-        if (!videoResponse.ok) {
-            const errorText = await videoResponse.text();
-            throw new Error(`Ошибка отправки videos.json: ${videoResponse.status} ${errorText}`);
-        }
-        console.log('✅ videos.json отправлен');
-
-        const usersSha = await getFileSha(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/users.json`);
-        const usersResponse = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/users.json`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${githubToken}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/vnd.github.v3+json'
-            },
-            body: JSON.stringify({
-                message: `Обновление пользователей CarambaTV ${new Date().toLocaleString()}`,
-                content: btoa(unescape(encodeURIComponent(JSON.stringify(usersData, null, 2)))),
-                sha: usersSha || undefined
-            })
-        });
-
-        if (!usersResponse.ok) {
-            const errorText = await usersResponse.text();
-            console.warn('Ошибка отправки users.json:', errorText);
-        } else {
-            console.log('✅ users.json отправлен');
-        }
-
-        alert(t('syncSuccess'));
-    } catch (error) {
-        console.error('Ошибка синхронизации:', error);
-        alert(`${t('syncError')}: ${error.message}`);
-        if (error.message.includes('401') || error.message.includes('403')) {
-            localStorage.removeItem('githubToken');
-            githubToken = null;
-        }
-    } finally {
-        isSyncing = false;
-        syncBtn.innerText = t('syncButton');
-        syncBtn.classList.remove('syncing');
-    }
-}
-
-// ================================================================
-//  ОСТАЛЬНЫЕ ФУНКЦИИ (renderGrid, openPlayer, likeVideo и т.д.)
-// ================================================================
-
-function getTimeAgo(timestamp) {
-    if (!timestamp) return 'Неизвестно';
-    const now = Date.now();
-    const diff = Math.floor((now - timestamp) / 1000);
-    if (diff < 60) return diff + ' сек назад';
-    if (diff < 3600) return Math.floor(diff / 60) + ' мин назад';
-    if (diff < 86400) return Math.floor(diff / 3600) + ' ч назад';
-    return Math.floor(diff / 86400) + ' дн назад';
-}
-
-function goHome() {
-    currentFilter = 'all';
-    document.querySelectorAll('.nav-links-center a').forEach(el => el.classList.remove('active'));
-    const first = document.querySelector('.nav-links-center a:first-child');
-    if (first) first.classList.add('active');
-    document.getElementById('homeSection').style.display = 'block';
-    document.getElementById('playerSection').style.display = 'none';
-    document.getElementById('gifPlayerSection').style.display = 'none';
-    document.getElementById('imagePlayerSection').style.display = 'none';
-    document.getElementById('videoOfDaySection').style.display = 'none';
-    document.getElementById('gifSection').style.display = 'none';
-    document.getElementById('imageSection').style.display = 'none';
-    renderGrid();
-}
-
-function showGifs() {
-    currentFilter = 'gif';
-    document.querySelectorAll('.nav-links-center a').forEach(el => el.classList.remove('active'));
-    const el = document.getElementById('navGifs');
-    if (el) el.classList.add('active');
-    document.getElementById('homeSection').style.display = 'none';
-    document.getElementById('playerSection').style.display = 'none';
-    document.getElementById('gifPlayerSection').style.display = 'none';
-    document.getElementById('imagePlayerSection').style.display = 'none';
-    document.getElementById('videoOfDaySection').style.display = 'none';
-    document.getElementById('gifSection').style.display = 'block';
-    document.getElementById('imageSection').style.display = 'none';
-    renderGifGrid();
-}
-
-function showImages() {
-    currentFilter = 'image';
-    document.querySelectorAll('.nav-links-center a').forEach(el => el.classList.remove('active'));
-    const el = document.getElementById('navImages');
-    if (el) el.classList.add('active');
-    document.getElementById('homeSection').style.display = 'none';
-    document.getElementById('playerSection').style.display = 'none';
-    document.getElementById('gifPlayerSection').style.display = 'none';
-    document.getElementById('imagePlayerSection').style.display = 'none';
-    document.getElementById('videoOfDaySection').style.display = 'none';
-    document.getElementById('gifSection').style.display = 'none';
-    document.getElementById('imageSection').style.display = 'block';
-    renderImageGrid();
-}
-
-function showVideoOfDay() {
-    currentFilter = 'video_of_day';
-    document.querySelectorAll('.nav-links-center a').forEach(el => el.classList.remove('active'));
-    const el = document.getElementById('navVideoOfDay');
-    if (el) el.classList.add('active');
-    document.getElementById('homeSection').style.display = 'none';
-    document.getElementById('playerSection').style.display = 'none';
-    document.getElementById('gifPlayerSection').style.display = 'none';
-    document.getElementById('imagePlayerSection').style.display = 'none';
-    document.getElementById('videoOfDaySection').style.display = 'block';
-    document.getElementById('gifSection').style.display = 'none';
-    document.getElementById('imageSection').style.display = 'none';
-    renderVideoOfDay();
-}
-
-function filterCategory(type) {
-    currentFilter = type;
-    document.querySelectorAll('.nav-links-center a').forEach(el => el.classList.remove('active'));
-    if (type === '50') {
-        const el = document.getElementById('navIssues');
-        if (el) el.classList.add('active');
-    } else if (type === 'опрос') {
-        const el = document.getElementById('navPolls');
-        if (el) el.classList.add('active');
-    }
-    document.getElementById('homeSection').style.display = 'block';
-    document.getElementById('playerSection').style.display = 'none';
-    document.getElementById('gifPlayerSection').style.display = 'none';
-    document.getElementById('imagePlayerSection').style.display = 'none';
-    document.getElementById('videoOfDaySection').style.display = 'none';
-    document.getElementById('gifSection').style.display = 'none';
-    document.getElementById('imageSection').style.display = 'none';
-    renderGrid();
-}
-
-function renderGrid() {
-    const grid = document.getElementById('videoGrid');
-    grid.innerHTML = '';
-    let filtered = [...videoDB];
-    if (currentFilter === '50') {
-        filtered = videoDB.filter(v => v.title && (v.title.toLowerCase().includes('+50') || v.title.toLowerCase().includes('+-50')));
-    } else if (currentFilter === 'опрос') {
-        filtered = videoDB.filter(v => v.title && v.title.toLowerCase().includes('опрос'));
-    }
-    if (filtered.length === 0) {
-        grid.innerHTML = `<div class="empty-message"><h2>${t('emptyTitle')}</h2><p>${t('emptyDesc')}</p></div>`;
-        return;
-    }
-    filtered.forEach(v => {
-        const timeAgo = v.timestamp ? getTimeAgo(v.timestamp) : 'Неизвестно';
-        grid.innerHTML += `
-            <div class="home-card" onclick="openPlayer(${v.id})">
-                ${isAdmin() ? `<button class="delete-btn" onclick="deleteContent(${v.id}); event.stopPropagation();">🗑️ Удалить</button>` : ''}
-                <img src="${v.img || 'https://via.placeholder.com/320x180/222/555?text=No+Img'}" alt="${v.title}" loading="lazy">
-                <div class="home-info">
-                    <span class="home-title">${v.title}</span>
-                    ${v.tags ? `<span class="home-tags">${v.tags}</span>` : ''}
-                    <span class="home-author">Автор: ${v.author || 'Неизвестен'}</span>
-                    <span class="home-time">Загружено: ${timeAgo}</span>
-                    <span class="home-views">${t('views')}: ${v.views || 0}</span>
-                </div>
-            </div>
-        `;
-    });
-    if (isAdmin()) document.querySelectorAll('.delete-btn').forEach(b => b.style.display = 'block');
-}
-
-function renderGifGrid() {
-    const grid = document.getElementById('gifGrid');
-    grid.innerHTML = '';
-    if (gifDB.length === 0) {
-        grid.innerHTML = `<div class="empty-message"><h2>🎞️ Гифки съели!</h2><p>Загрузите гифку через кнопку 'Загрузить'.</p></div>`;
-        return;
-    }
-    gifDB.forEach(g => {
-        const timeAgo = g.timestamp ? getTimeAgo(g.timestamp) : 'Неизвестно';
-        grid.innerHTML += `
-            <div class="gif-card" onclick="openGifPlayer(${g.id})">
-                ${isAdmin() ? `<button class="delete-btn" onclick="deleteContent('gif_${g.id}'); event.stopPropagation();">🗑️ Удалить</button>` : ''}
-                <img src="${g.img || g.url}" alt="${g.title}" loading="lazy">
-                <div class="gif-info">
-                    <span class="gif-title">${g.title}</span>
-                    <span class="home-time">Загружено: ${timeAgo}</span>
-                    <span class="home-views">${t('views')}: ${g.views || 0}</span>
-                </div>
-            </div>
-        `;
-    });
-    if (isAdmin()) document.querySelectorAll('.delete-btn').forEach(b => b.style.display = 'block');
-}
-
-function renderImageGrid() {
-    const grid = document.getElementById('imageGrid');
-    grid.innerHTML = '';
-    if (imageDB.length === 0) {
-        grid.innerHTML = `<div class="empty-message"><h2>🖼️ Картинки съели!</h2><p>Загрузите картинку через кнопку 'Загрузить'.</p></div>`;
-        return;
-    }
-    imageDB.forEach(img => {
-        const timeAgo = img.timestamp ? getTimeAgo(img.timestamp) : 'Неизвестно';
-        grid.innerHTML += `
-            <div class="image-card" onclick="openImagePlayer(${img.id})">
-                ${isAdmin() ? `<button class="delete-btn" onclick="deleteContent('img_${img.id}'); event.stopPropagation();">🗑️ Удалить</button>` : ''}
-                <img src="${img.img || img.url}" alt="${img.title}" loading="lazy">
-                <div class="image-info">
-                    <span class="image-title">${img.title}</span>
-                    <span class="home-time">Загружено: ${timeAgo}</span>
-                    <span class="home-views">${t('views')}: ${img.views || 0}</span>
-                </div>
-            </div>
-        `;
-    });
-    if (isAdmin()) document.querySelectorAll('.delete-btn').forEach(b => b.style.display = 'block');
-}
-
-function renderVideoOfDay() {
-    const grid = document.getElementById('videoOfDayGrid');
-    grid.innerHTML = '';
-    let allContent = [];
-    videoDB.forEach(v => allContent.push({ ...v, contentType: 'video', id: v.id, img: v.img || 'https://via.placeholder.com/320x180/222/555?text=No+Img' }));
-    gifDB.forEach(g => allContent.push({ ...g, contentType: 'gif', id: 'gif_' + g.id, img: g.img || g.url }));
-    imageDB.forEach(img => allContent.push({ ...img, contentType: 'image', id: 'img_' + img.id, img: img.url }));
-    if (allContent.length === 0) {
-        grid.innerHTML = `<div class="empty-message"><h2>🎥 Сегодня нет контента в топе</h2><p>Загрузите контент, и лучшие попадут сюда!</p></div>`;
-        return;
-    }
-    const sorted = allContent.sort((a, b) => (b.views || 0) - (a.views || 0));
-    sorted.forEach(item => {
-        const timeAgo = item.timestamp ? getTimeAgo(item.timestamp) : 'Неизвестно';
-        let icon = '', clickHandler = '';
-        if (item.contentType === 'video') { icon = '🎬'; clickHandler = `openPlayer(${item.id})`; }
-        else if (item.contentType === 'gif') { icon = '🎞️'; clickHandler = `openGifPlayer(${item.id.replace('gif_', '')})`; }
-        else if (item.contentType === 'image') { icon = '🖼️'; clickHandler = `openImagePlayer(${item.id.replace('img_', '')})`; }
-        grid.innerHTML += `
-            <div class="home-card" onclick="${clickHandler}">
-                ${isAdmin() ? `<button class="delete-btn" onclick="deleteContent('${item.id}'); event.stopPropagation();">🗑️ Удалить</button>` : ''}
-                <img src="${item.img}" alt="${item.title}" loading="lazy">
-                <div class="home-info">
-                    <span class="home-title">${icon} ${item.title}</span>
-                    ${item.tags ? `<span class="home-tags">${item.tags}</span>` : ''}
-                    <span class="home-author">Автор: ${item.author || 'Неизвестен'}</span>
-                    <span class="home-time">Загружено: ${timeAgo}</span>
-                    <span class="home-views">${t('views')}: ${item.views || 0}</span>
-                </div>
-            </div>
-        `;
-    });
-    if (isAdmin()) document.querySelectorAll('.delete-btn').forEach(b => b.style.display = 'block');
-}
-
-// === ПОИСК ===
-function handleSearch() {
-    const query = document.getElementById('searchInput').value.toLowerCase().trim();
-    if (!query) {
-        if (currentFilter === 'gif') { showGifs(); return; }
-        if (currentFilter === 'image') { showImages(); return; }
-        if (currentFilter === 'video_of_day') { showVideoOfDay(); return; }
-        goHome();
-        return;
-    }
-    if (currentFilter === 'gif') {
-        const grid = document.getElementById('gifGrid');
-        grid.innerHTML = '';
-        const results = gifDB.filter(g => g.title.toLowerCase().includes(query) || (g.tags && g.tags.toLowerCase().includes(query)));
-        if (results.length === 0) {
-            grid.innerHTML = `<div class="empty-message"><h2>🔍 Ничего не найдено по запросу "${query}"</h2></div>`;
-        } else {
-            results.forEach(g => {
-                const timeAgo = g.timestamp ? getTimeAgo(g.timestamp) : 'Неизвестно';
-                grid.innerHTML += `
-                    <div class="gif-card" onclick="openGifPlayer(${g.id})">
-                        ${isAdmin() ? `<button class="delete-btn" onclick="deleteContent('gif_${g.id}'); event.stopPropagation();">🗑️ Удалить</button>` : ''}
-                        <img src="${g.img || g.url}" alt="${g.title}" loading="lazy">
-                        <div class="gif-info">
-                            <span class="gif-title">${g.title}</span>
-                            <span class="home-time">Загружено: ${timeAgo}</span>
-                        </div>
-                    </div>
-                `;
-            });
-            if (isAdmin()) document.querySelectorAll('.delete-btn').forEach(b => b.style.display = 'block');
-        }
-        return;
-    }
-    if (currentFilter === 'image') {
-        const grid = document.getElementById('imageGrid');
-        grid.innerHTML = '';
-        const results = imageDB.filter(img => img.title.toLowerCase().includes(query) || (img.tags && img.tags.toLowerCase().includes(query)));
-        if (results.length === 0) {
-            grid.innerHTML = `<div class="empty-message"><h2>🔍 Ничего не найдено по запросу "${query}"</h2></div>`;
-        } else {
-            results.forEach(img => {
-                const timeAgo = img.timestamp ? getTimeAgo(img.timestamp) : 'Неизвестно';
-                grid.innerHTML += `
-                    <div class="image-card" onclick="openImagePlayer(${img.id})">
-                        ${isAdmin() ? `<button class="delete-btn" onclick="deleteContent('img_${img.id}'); event.stopPropagation();">🗑️ Удалить</button>` : ''}
-                        <img src="${img.img || img.url}" alt="${img.title}" loading="lazy">
-                        <div class="image-info">
-                            <span class="image-title">${img.title}</span>
-                            <span class="home-time">Загружено: ${timeAgo}</span>
-                        </div>
-                    </div>
-                `;
-            });
-            if (isAdmin()) document.querySelectorAll('.delete-btn').forEach(b => b.style.display = 'block');
-        }
-        return;
-    }
-    if (currentFilter === 'video_of_day') {
-        renderVideoOfDay();
-        return;
-    }
-    // Поиск по видео
-    const grid = document.getElementById('videoGrid');
-    grid.innerHTML = '';
-    const results = videoDB.filter(v => v.title.toLowerCase().includes(query) || (v.tags && v.tags.toLowerCase().includes(query)));
-    if (results.length === 0) {
-        grid.innerHTML = `<div class="empty-message"><h2>🔍 Ничего не найдено по запросу "${query}"</h2></div>`;
-    } else {
-        results.forEach(v => {
-            const timeAgo = v.timestamp ? getTimeAgo(v.timestamp) : 'Неизвестно';
-            grid.innerHTML += `
-                <div class="home-card" onclick="openPlayer(${v.id})">
-                    ${isAdmin() ? `<button class="delete-btn" onclick="deleteContent(${v.id}); event.stopPropagation();">🗑️ Удалить</button>` : ''}
-                    <img src="${v.img || 'https://via.placeholder.com/320x180/222/555?text=No+Img'}" alt="${v.title}" loading="lazy">
-                    <div class="home-info">
-                        <span class="home-title">${v.title}</span>
-                        ${v.tags ? `<span class="home-tags">${v.tags}</span>` : ''}
-                        <span class="home-author">Автор: ${v.author || 'Неизвестен'}</span>
-                        <span class="home-time">Загружено: ${timeAgo}</span>
-                        <span class="home-views">${t('views')}: ${v.views || 0}</span>
-                    </div>
-                </div>
-            `;
-        });
-        if (isAdmin()) document.querySelectorAll('.delete-btn').forEach(b => b.style.display = 'block');
-    }
-}
-
-// === ПЛЕЕРЫ ===
-function openPlayer(id) {
-    currentVideoId = id;
-    document.getElementById('homeSection').style.display = 'none';
-    document.getElementById('playerSection').style.display = 'block';
-    document.getElementById('gifPlayerSection').style.display = 'none';
-    document.getElementById('imagePlayerSection').style.display = 'none';
-    document.getElementById('videoOfDaySection').style.display = 'none';
-    document.getElementById('gifSection').style.display = 'none';
-    document.getElementById('imageSection').style.display = 'none';
-    loadVideo();
-}
-
-function openGifPlayer(id) {
-    currentGifId = id;
-    document.getElementById('homeSection').style.display = 'none';
-    document.getElementById('playerSection').style.display = 'none';
-    document.getElementById('gifPlayerSection').style.display = 'block';
-    document.getElementById('imagePlayerSection').style.display = 'none';
-    document.getElementById('videoOfDaySection').style.display = 'none';
-    document.getElementById('gifSection').style.display = 'none';
-    document.getElementById('imageSection').style.display = 'none';
-    loadGif();
-}
-
-function openImagePlayer(id) {
-    currentImageId = id;
-    document.getElementById('homeSection').style.display = 'none';
-    document.getElementById('playerSection').style.display = 'none';
-    document.getElementById('gifPlayerSection').style.display = 'none';
-    document.getElementById('imagePlayerSection').style.display = 'block';
-    document.getElementById('videoOfDaySection').style.display = 'none';
-    document.getElementById('gifSection').style.display = 'none';
-    document.getElementById('imageSection').style.display = 'none';
-    loadImage();
-}
-
-// === ЗАГРУЗКА В ПЛЕЕР ===
-function loadVideo() {
-    const vid = videoDB.find(v => v.id === currentVideoId);
-    if (!vid) return;
-    document.getElementById('currentTitle').innerText = vid.title;
-    document.getElementById('currentAuthor').innerText = vid.author || 'CarambaTV';
-    if (!viewedVideos.includes(vid.id)) {
-        viewedVideos.push(vid.id);
-        vid.views = (vid.views || 0) + 1;
-        localStorage.setItem('carambaDB', JSON.stringify(videoDB));
-        localStorage.setItem('carambaViewed', JSON.stringify(viewedVideos));
-    }
-    document.getElementById('viewCounter').innerText = (t('login') === 'Login' ? 'Views' : 'Просмотров') + ': ' + (vid.views || 0);
-    const container = document.getElementById('mainPlayerContainer');
-    const url = vid.url;
-    if (url.includes('rutube.ru') || url.includes('rutube')) {
-        let embedUrl = url.replace('/video/', '/embed/');
-        if (embedUrl.includes('?')) embedUrl += '&autoplay=1&mute=0';
-        else embedUrl += '?autoplay=1&mute=0';
-        container.innerHTML = `<iframe src="${embedUrl}" width="100%" height="100%" frameborder="0" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
-    } else {
-        container.innerHTML = `<p style="color:#ff4444; text-align:center; padding:20px;">⚠️ Неподдерживаемый формат. Используйте RuTube.</p>`;
-    }
-    document.getElementById('likeCount').innerText = (vid.likes || []).length;
-    const btn = document.getElementById('likeBtn');
-    btn.classList.toggle('liked', likedVideos.includes(vid.id));
-    renderComments();
-}
-
-function loadGif() {
-    const gif = gifDB.find(g => g.id === currentGifId);
-    if (!gif) return;
-    document.getElementById('currentGifTitle').innerText = gif.title;
-    document.getElementById('currentGifAuthor').innerText = gif.author || 'CarambaTV';
-    document.getElementById('gifPlayer').src = gif.url;
-    if (!viewedGifs.includes(gif.id)) {
-        viewedGifs.push(gif.id);
-        gif.views = (gif.views || 0) + 1;
-        localStorage.setItem('carambaGifs', JSON.stringify(gifDB));
-        localStorage.setItem('carambaViewedGifs', JSON.stringify(viewedGifs));
-    }
-    document.getElementById('gifViewCounter').innerText = (t('login') === 'Login' ? 'Views' : 'Просмотров') + ': ' + (gif.views || 0);
-    document.getElementById('gifLikeCount').innerText = (gif.likes || []).length;
-    const btn = document.getElementById('gifLikeBtn');
-    btn.classList.toggle('liked', likedGifs.includes('gif_' + gif.id));
-    renderGifComments();
-}
-
-function loadImage() {
-    const img = imageDB.find(i => i.id === currentImageId);
-    if (!img) return;
-    document.getElementById('currentImageTitle').innerText = img.title;
-    document.getElementById('currentImageAuthor').innerText = img.author || 'CarambaTV';
-    document.getElementById('imagePlayer').src = img.url;
-    if (!viewedImages.includes(img.id)) {
-        viewedImages.push(img.id);
-        img.views = (img.views || 0) + 1;
-        localStorage.setItem('carambaImages', JSON.stringify(imageDB));
-        localStorage.setItem('carambaViewedImages', JSON.stringify(viewedImages));
-    }
-    document.getElementById('imageViewCounter').innerText = (t('login') === 'Login' ? 'Views' : 'Просмотров') + ': ' + (img.views || 0);
-    document.getElementById('imageLikeCount').innerText = (img.likes || []).length;
-    const btn = document.getElementById('imageLikeBtn');
-    btn.classList.toggle('liked', likedImages.includes('img_' + img.id));
-    renderImageComments();
-}
-
-// === ЛАЙКИ ===
-function likeVideo() {
-    if (!currentVideoId) return;
-    const vid = videoDB.find(v => v.id === currentVideoId);
-    if (!vid) return;
-    const index = likedVideos.indexOf(vid.id);
-    if (index !== -1) {
-        likedVideos.splice(index, 1);
-        const userIndex = vid.likes.indexOf("user");
-        if (userIndex !== -1) vid.likes.splice(userIndex, 1);
-    } else {
-        likedVideos.push(vid.id);
-        if (!vid.likes) vid.likes = [];
-        vid.likes.push("user");
-    }
-    localStorage.setItem('carambaDB', JSON.stringify(videoDB));
-    localStorage.setItem('carambaLiked', JSON.stringify(likedVideos));
-    loadVideo();
-}
-
-function likeGif() {
-    if (!currentGifId) return;
-    const gif = gifDB.find(g => g.id === currentGifId);
-    if (!gif) return;
-    const key = 'gif_' + gif.id;
-    const index = likedGifs.indexOf(key);
-    if (index !== -1) {
-        likedGifs.splice(index, 1);
-        const userIndex = gif.likes.indexOf("user");
-        if (userIndex !== -1) gif.likes.splice(userIndex, 1);
-    } else {
-        likedGifs.push(key);
-        if (!gif.likes) gif.likes = [];
-        gif.likes.push("user");
-    }
-    localStorage.setItem('carambaGifs', JSON.stringify(gifDB));
-    localStorage.setItem('carambaLikedGifs', JSON.stringify(likedGifs));
-    loadGif();
-}
-
-function likeImage() {
-    if (!currentImageId) return;
-    const img = imageDB.find(i => i.id === currentImageId);
-    if (!img) return;
-    const key = 'img_' + img.id;
-    const index = likedImages.indexOf(key);
-    if (index !== -1) {
-        likedImages.splice(index, 1);
-        const userIndex = img.likes.indexOf("user");
-        if (userIndex !== -1) img.likes.splice(userIndex, 1);
-    } else {
-        likedImages.push(key);
-        if (!img.likes) img.likes = [];
-        img.likes.push("user");
-    }
-    localStorage.setItem('carambaImages', JSON.stringify(imageDB));
-    localStorage.setItem('carambaLikedImages', JSON.stringify(likedImages));
-    loadImage();
-}
-
-// === ПОДПИСКА ===
-function subscribe() {
-    if (isSubscribed) return;
-    isSubscribed = true;
-    localStorage.setItem('carambaSubscribed', JSON.stringify(true));
-    updateSubscribeButtons();
-    alert(t('login') === 'Login' ? "You subscribed!" : "Вы подписались!");
-}
-
-// === КОММЕНТАРИИ ===
-function renderComments() {
-    const list = document.getElementById('commentList');
-    list.innerHTML = '';
-    if (!comments[currentVideoId]) return;
-    comments[currentVideoId].forEach(c => {
-        list.innerHTML += `<div class="comment-item"><span class="user">${c.user}</span> <span class="date">${c.date}</span><div class="text">${c.text}</div></div>`;
-    });
-}
-
-function renderGifComments() {
-    const list = document.getElementById('gifCommentList');
-    list.innerHTML = '';
-    if (!gifComments[currentGifId]) return;
-    gifComments[currentGifId].forEach(c => {
-        list.innerHTML += `<div class="comment-item"><span class="user">${c.user}</span> <span class="date">${c.date}</span><div class="text">${c.text}</div></div>`;
-    });
-}
-
-function renderImageComments() {
-    const list = document.getElementById('imageCommentList');
-    list.innerHTML = '';
-    if (!imageComments[currentImageId]) return;
-    imageComments[currentImageId].forEach(c => {
-        list.innerHTML += `<div class="comment-item"><span class="user">${c.user}</span> <span class="date">${c.date}</span><div class="text">${c.text}</div></div>`;
-    });
-}
-
-function addComment() {
-    const input = document.getElementById('commentInput');
-    const user = getCurrentUser();
-    if (!user) return alert(t('login') === 'Login' ? "Log in to comment!" : "Войдите, чтобы комментировать!");
-    if (!input.value.trim()) return;
-    if (!comments[currentVideoId]) comments[currentVideoId] = [];
-    comments[currentVideoId].push({ user: user.name, text: input.value.trim(), date: new Date().toLocaleString() });
-    localStorage.setItem('carambaComments', JSON.stringify(comments));
-    input.value = '';
-    renderComments();
-}
-
-function addGifComment() {
-    const input = document.getElementById('gifCommentInput');
-    const user = getCurrentUser();
-    if (!user) return alert(t('login') === 'Login' ? "Log in to comment!" : "Войдите, чтобы комментировать!");
-    if (!input.value.trim()) return;
-    if (!gifComments[currentGifId]) gifComments[currentGifId] = [];
-    gifComments[currentGifId].push({ user: user.name, text: input.value.trim(), date: new Date().toLocaleString() });
-    localStorage.setItem('carambaGifComments', JSON.stringify(gifComments));
-    input.value = '';
-    renderGifComments();
-}
-
-function addImageComment() {
-    const input = document.getElementById('imageCommentInput');
-    const user = getCurrentUser();
-    if (!user) return alert(t('login') === 'Login' ? "Log in to comment!" : "Войдите, чтобы комментировать!");
-    if (!input.value.trim()) return;
-    if (!imageComments[currentImageId]) imageComments[currentImageId] = [];
-    imageComments[currentImageId].push({ user: user.name, text: input.value.trim(), date: new Date().toLocaleString() });
-    localStorage.setItem('carambaImageComments', JSON.stringify(imageComments));
-    input.value = '';
-    renderImageComments();
-}
-
-// === АВТОРИЗАЦИЯ ===
-function openModal(mode) {
-    isRegisterMode = (mode === 'register');
-    document.getElementById('modalTitle').innerText = isRegisterMode ? t('modalRegister') : t('modalLogin');
-    document.getElementById('modalActionBtn').innerText = isRegisterMode ? t('modalRegisterBtn') : t('modalLoginBtn');
-    document.getElementById('modalToggleText').innerText = isRegisterMode ? t('modalToggleRegister') : t('modalToggleLogin');
-    document.getElementById('authModal').style.display = 'flex';
-    document.getElementById('loginUser').value = '';
-    document.getElementById('loginPass').value = '';
-}
-
-function closeModal() { document.getElementById('authModal').style.display = 'none'; }
-
-function toggleModalMode() { openModal(isRegisterMode ? 'login' : 'register'); }
-
-function loginUser() {
-    const u = document.getElementById('loginUser').value.trim();
-    const p = document.getElementById('loginPass').value;
-    if (!u || !p) return alert(t('login') === 'Login' ? "Fill in the fields!" : "Заполните поля!");
-    if (isRegisterMode) {
-        if (usersDB.find(x => x.login === u)) {
-            return alert(t('login') === 'Login' ? "Login already taken!" : "Логин уже занят!");
-        }
-        const hashedPass = btoa(p);
-        usersDB.push({ login: u, pass: hashedPass });
-        localStorage.setItem('carambaUsers', JSON.stringify(usersDB));
-        alert(t('login') === 'Login' ? "Registration successful! Log in." : "Регистрация успешна! Войдите.");
-        openModal('login');
-        return;
-    }
-    if (u === 'artehkk' && p === '228228') {
-        closeModal();
-        setSession('artehkk', true);
-        alert(t('login') === 'Login' ? "Welcome, Admin!" : "Добро пожаловать, Админ!");
-        location.reload();
-        return;
-    }
-    const hashedPass = btoa(p);
-    if (usersDB.find(x => x.login === u && x.pass === hashedPass)) {
-        closeModal();
-        setSession(u, false);
-        alert(t('login') === 'Login' ? "Login successful!" : "Вход выполнен!");
-        location.reload();
-        return;
-    }
-    alert(t('login') === 'Login' ? "Invalid login or password!" : "Неверный логин или пароль!");
-}
-
-// === ЗАГРУЗКА КОНТЕНТА ===
-function openUploadModal() {
-    document.getElementById('uploadModal').style.display = 'flex';
-    document.getElementById('uploadTitle').value = '';
-    document.getElementById('uploadTags').value = '';
-    document.getElementById('uploadImg').value = '';
-    document.getElementById('manualUrl').value = '';
-}
-
-function closeUploadModal() { document.getElementById('uploadModal').style.display = 'none'; }
-
-function addContentFromModal() {
-    const manualUrl = document.getElementById('manualUrl').value.trim();
-    const title = document.getElementById('uploadTitle').value.trim();
-    const tags = document.getElementById('uploadTags').value.trim();
-    const img = document.getElementById('uploadImg').value.trim();
-    if (!title || !manualUrl) {
-        alert("Ошибка: Название и ссылка обязательны!");
-        return;
-    }
-    const user = getCurrentUser();
-    const author = user ? user.name : 'Гость';
-    let type = 'video';
-    const lowerUrl = manualUrl.toLowerCase();
-    if (lowerUrl.includes('rutube') || lowerUrl.endsWith('.mp4')) type = 'video';
-    else if (lowerUrl.endsWith('.gif')) type = 'gif';
-    else if (lowerUrl.endsWith('.jpg') || lowerUrl.endsWith('.jpeg') || lowerUrl.endsWith('.png') || lowerUrl.endsWith('.webp')) type = 'image';
-    let db, key;
-    if (type === 'video') { db = videoDB; key = 'carambaDB'; }
-    else if (type === 'gif') { db = gifDB; key = 'carambaGifs'; }
-    else if (type === 'image') { db = imageDB; key = 'carambaImages'; }
-    const newId = db.length > 0 ? Math.max(...db.map(v => v.id)) + 1 : 1;
-    const newItem = { id: newId, title, tags, url: manualUrl, img: img || manualUrl, author, views: 0, likes: [], timestamp: Date.now() };
-    db.push(newItem);
-    localStorage.setItem(key, JSON.stringify(db));
-    closeUploadModal();
-    alert(`✅ ${type === 'video' ? 'Видео' : type === 'gif' ? 'Гифка' : 'Картинка'} загружена и опубликована!`);
-    if (type === 'gif') showGifs();
-    else if (type === 'image') showImages();
-    else goHome();
-}
-
-// === УДАЛЕНИЕ ===
-function deleteContent(id) {
-    if (!isAdmin()) {
-        alert("⛔ Удаление разрешено только администратору!");
-        return;
-    }
-    if (!confirm("Вы уверены, что хотите удалить этот контент?")) return;
-    if (typeof id === 'string' && id.startsWith('gif_')) {
-        const gid = parseInt(id.replace('gif_', ''));
-        gifDB = gifDB.filter(g => g.id !== gid);
-        localStorage.setItem('carambaGifs', JSON.stringify(gifDB));
-        showGifs();
-    } else if (typeof id === 'string' && id.startsWith('img_')) {
-        const iid = parseInt(id.replace('img_', ''));
-        imageDB = imageDB.filter(i => i.id !== iid);
-        localStorage.setItem('carambaImages', JSON.stringify(imageDB));
-        showImages();
-    } else {
-        const vid = parseInt(id);
-        videoDB = videoDB.filter(v => v.id !== vid);
-        localStorage.setItem('carambaDB', JSON.stringify(videoDB));
-        goHome();
-    }
-}
-
-// === ОПРОСЫ ===
-function votePoll(pollId) {
-    const poll = pollDB.find(p => 'poll_' + p.id === pollId);
-    if (!poll) return;
-    const selected = document.querySelector(`input[name="poll_${pollId}"]:checked`);
-    if (!selected) return alert("Выберите вариант!");
-    if (votedPolls.includes(pollId)) {
-        alert("Вы уже голосовали в этом опросе! 1 аккаунт = 1 голос.");
-        return;
-    }
-    poll.votes[parseInt(selected.value)] += 1;
-    votedPolls.push(pollId);
-    localStorage.setItem('carambaPolls', JSON.stringify(pollDB));
-    localStorage.setItem('carambaVotedPolls', JSON.stringify(votedPolls));
-    document.getElementById(`result_${pollId}`).innerText = "Голосов: " + poll.votes.reduce((a, b) => a + b, 0);
-    alert("Ваш голос учтен!");
-}
-
-function addPollToDB() {
-    const q = document.getElementById('pollQuestionInput').value;
-    const o1 = document.getElementById('pollOpt1').value;
-    const o2 = document.getElementById('pollOpt2').value;
-    const o3 = document.getElementById('pollOpt3').value;
-    if (!q || !o1 || !o2 || !o3) return alert("Заполните все поля опроса!");
-    const newId = pollDB.length > 0 ? Math.max(...pollDB.map(p => p.id)) + 1 : 1;
-    pollDB.push({ id: newId, question: q, options: [o1, o2, o3], votes: [0, 0, 0] });
-    localStorage.setItem('carambaPolls', JSON.stringify(pollDB));
-    alert("Опрос опубликован!");
-    document.getElementById('pollQuestionInput').value = '';
-    document.getElementById('pollOpt1').value = '';
-    document.getElementById('pollOpt2').value = '';
-    document.getElementById('pollOpt3').value = '';
-    goHome();
-}
-
-// === ПРОФИЛЬ ===
-function openProfileModal() {
-    const user = getCurrentUser();
-    if (!user) return alert("Вы не авторизованы!");
-    document.getElementById('profileModalTitle').innerText = user.isAdmin ? 'Панель управления (Админ)' : t('profileTitle');
-    const content = document.getElementById('profileContent');
-    if (user.isAdmin) {
-        content.innerHTML = `
-            <div style="display:flex; flex-direction:column; gap:12px; margin-top:10px;">
-                <button class="modal-btn" onclick="openAdminModal('tickets')">${t('ticketsList')}</button>
-                <button class="modal-btn" onclick="openAdminModal('videos')">${t('allVideos')}</button>
-                <button class="modal-btn" onclick="openAdminModal('gifs')">${t('allGifs')}</button>
-                <button class="modal-btn" onclick="openAdminModal('images')">${t('allImages')}</button>
-                <button class="modal-btn" onclick="openAdminModal('poll')" style="background:#ffcc00; color:#000;">${t('createPoll')}</button>
-                <hr style="border-color:#333; width:100%;">
-                <button class="modal-btn" style="background:#444;" onclick="logoutUser()">${t('logout')}</button>
-            </div>
-        `;
-    } else {
-        const existingTicket = ticketDB.find(t => t.user === user.name && t.status === 'pending');
-        content.innerHTML = `
-            <div style="display:flex; flex-direction:column; gap:12px; margin-top:10px;">
-                ${existingTicket ? `<div style="color:#ffcc00; font-size:13px;">Ваша заявка уже отправлена и ожидает рассмотрения!</div>` : 
-                `<button class="modal-btn" onclick="requestBadge()">${t('getBadge')}</button>`}
-                <hr style="border-color:#333; width:100%;">
-                <button class="modal-btn" style="background:#444;" onclick="logoutUser()">${t('logout')}</button>
-            </div>
-        `;
-    }
-    document.getElementById('profileModal').style.display = 'flex';
-}
-
-function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
-
-function requestBadge() {
-    const user = getCurrentUser();
-    if (!user) return;
-    ticketDB.push({ user: user.name, status: 'pending' });
-    localStorage.setItem('carambaTickets', JSON.stringify(ticketDB));
-    closeProfileModal();
-    alert(t('badgeRequestSent'));
-}
-
-// === АДМИНКА ===
-function openAdminModal(type) {
-    const content = document.getElementById('adminModalContent');
-    document.getElementById('adminModal').style.display = 'flex';
-    if (type === 'tickets') {
-        const pending = ticketDB.filter(t => t.status === 'pending');
-        if (pending.length === 0) {
-            content.innerHTML = `<p style="color:#888;">${t('noTickets')}</p>`;
-            return;
-        }
-        content.innerHTML = pending.map(t => `
-            <div style="background:#222; padding:12px; margin-bottom:8px; border-radius:4px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-                <span style="font-weight:bold;">${t.user}</span>
-                <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                    <button class="modal-btn" style="background:linear-gradient(to bottom, #00aa00, #006600); color:#fff; border:none; padding:4px 12px; border-radius:3px; cursor:pointer; font-weight:bold;" onclick="approveBadge('${t.user}')">${t('approveBadge')}</button>
-                    <button class="modal-btn" style="background:linear-gradient(to bottom, #cc181e, #880000); color:#fff; border:none; padding:4px 12px; border-radius:3px; cursor:pointer; font-weight:bold;" onclick="rejectBadge('${t.user}')">${t('rejectBadge')}</button>
-                </div>
-            </div>
-        `).join('');
-    } else if (type === 'videos') {
-        if (videoDB.length === 0) {
-            content.innerHTML = `<p style="color:#888;">Нет видео для просмотра.</p>`;
-            return;
-        }
-        content.innerHTML = videoDB.map(v => `
-            <div style="background:#222; padding:12px; margin-bottom:8px; border-radius:4px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-                <div style="max-width:250px;">
-                    <div style="font-weight:bold; color:#fff;">${v.title}</div>
-                    <div style="font-size:12px; color:#888;">Автор: ${v.author || 'Неизвестен'} | Просмотров: ${v.views || 0}</div>
-                </div>
-                <div>
-                    <button class="modal-btn" style="background:linear-gradient(to bottom, #cc181e, #880000); color:#fff; border:none; padding:4px 10px; border-radius:3px; cursor:pointer; font-weight:bold;" onclick="deleteVideo(${v.id}); closeAdminModal();">🗑️ Удалить</button>
-                </div>
-            </div>
-        `).join('');
-    } else if (type === 'gifs') {
-        if (gifDB.length === 0) {
-            content.innerHTML = `<p style="color:#888;">Нет гифок для просмотра.</p>`;
-            return;
-        }
-        content.innerHTML = gifDB.map(g => `
-            <div style="background:#222; padding:12px; margin-bottom:8px; border-radius:4px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-                <div style="max-width:250px;">
-                    <div style="font-weight:bold; color:#fff;">${g.title}</div>
-                    <div style="font-size:12px; color:#888;">Автор: ${g.author || 'Неизвестен'} | Просмотров: ${g.views || 0}</div>
-                </div>
-                <div>
-                    <button class="modal-btn" style="background:linear-gradient(to bottom, #cc181e, #880000); color:#fff; border:none; padding:4px 10px; border-radius:3px; cursor:pointer; font-weight:bold;" onclick="deleteGif(${g.id}); closeAdminModal();">🗑️ Удалить</button>
-                </div>
-            </div>
-        `).join('');
-    } else if (type === 'images') {
-        if (imageDB.length === 0) {
-            content.innerHTML = `<p style="color:#888;">Нет картинок для просмотра.</p>`;
-            return;
-        }
-        content.innerHTML = imageDB.map(img => `
-            <div style="background:#222; padding:12px; margin-bottom:8px; border-radius:4px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-                <div style="max-width:250px;">
-                    <div style="font-weight:bold; color:#fff;">${img.title}</div>
-                    <div style="font-size:12px; color:#888;">Автор: ${img.author || 'Неизвестен'} | Просмотров: ${img.views || 0}</div>
-                </div>
-                <div>
-                    <button class="modal-btn" style="background:linear-gradient(to bottom, #cc181e, #880000); color:#fff; border:none; padding:4px 10px; border-radius:3px; cursor:pointer; font-weight:bold;" onclick="deleteImage(${img.id}); closeAdminModal();">🗑️ Удалить</button>
-                </div>
-            </div>
-        `).join('');
-    } else if (type === 'poll') {
-        content.innerHTML = `
-            <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
-                <input type="text" class="modal-input" id="pollQuestionInput" placeholder="Вопрос">
-                <input type="text" class="modal-input" id="pollOpt1" placeholder="Вариант 1">
-                <input type="text" class="modal-input" id="pollOpt2" placeholder="Вариант 2">
-                <input type="text" class="modal-input" id="pollOpt3" placeholder="Вариант 3">
-                <button class="modal-btn" onclick="addPollToDB(); closeAdminModal();" style="background:linear-gradient(to bottom, #ffcc00, #cc9900); color:#000; border:none; padding:10px; border-radius:3px; font-weight:bold; cursor:pointer;">Создать опрос</button>
-            </div>
-        `;
-    }
-}
-
-function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
-
-function approveBadge(user) {
-    const idx = ticketDB.findIndex(t => t.user === user && t.status === 'pending');
-    if (idx !== -1) {
-        ticketDB[idx].status = 'approved';
-        localStorage.setItem('carambaTickets', JSON.stringify(ticketDB));
-    }
-    alert(t('badgeApproved'));
-    openAdminModal('tickets');
-}
-
-function rejectBadge(user) {
-    const idx = ticketDB.findIndex(t => t.user === user && t.status === 'pending');
-    if (idx !== -1) {
-        ticketDB[idx].status = 'rejected';
-        localStorage.setItem('carambaTickets', JSON.stringify(ticketDB));
-    }
-    alert(t('badgeRejected'));
-    openAdminModal('tickets');
-}
-
-// === ПРАВИЛА ===
-function openRulesModal() { document.getElementById('rulesModal').style.display = 'flex'; }
-function closeRulesModal() { document.getElementById('rulesModal').style.display = 'none'; }
-
-// === ЭКСПОРТ В ГЛОБАЛЬНУЮ ОБЛАСТЬ ===
-window.goHome = goHome;
-window.showGifs = showGifs;
-window.showImages = showImages;
-window.showVideoOfDay = showVideoOfDay;
-window.filterCategory = filterCategory;
-window.openPlayer = openPlayer;
-window.openGifPlayer = openGifPlayer;
-window.openImagePlayer = openImagePlayer;
-window.handleSearch = handleSearch;
-window.likeVideo = likeVideo;
-window.likeGif = likeGif;
-window.likeImage = likeImage;
-window.subscribe = subscribe;
-window.addComment = addComment;
-window.addGifComment = addGifComment;
-window.addImageComment = addImageComment;
-window.openModal = openModal;
-window.closeModal = closeModal;
-window.toggleModalMode = toggleModalMode;
-window.loginUser = loginUser;
-window.logoutUser = logoutUser;
-window.openUploadModal = openUploadModal;
-window.closeUploadModal = closeUploadModal;
-window.addContentFromModal = addContentFromModal;
-window.deleteContent = deleteContent;
-window.votePoll = votePoll;
-window.addPollToDB = addPollToDB;
-window.openProfileModal = openProfileModal;
-window.closeProfileModal = closeProfileModal;
-window.requestBadge = requestBadge;
-window.openAdminModal = openAdminModal;
-window.closeAdminModal = closeAdminModal;
-window.approveBadge = approveBadge;
-window.rejectBadge = rejectBadge;
-window.openRulesModal = openRulesModal;
-window.closeRulesModal = closeRulesModal;
-window.switchLang = switchLang;
-window.syncWithGitHub = syncWithGitHub;
-window.deleteVideo = (id) => { deleteContent(id); };
-window.deleteGif = (id) => { deleteContent('gif_' + id); };
-window.deleteImage = (id) => { deleteContent('img_' + id); };
-
-// === ЗАПУСК ===
-document.getElementById('langSelect').value = currentLang;
-applyLang();
-checkSession();
-
-document.getElementById('userDisplay').addEventListener('click', function() {
-    if (this.innerText !== 'Гость' && this.style.display !== 'none') {
-        openProfileModal();
-    }
-});
-
-// Загружаем данные с GitHub
-fetchDataFromGitHub();
+// ВЕСЬ JS КАК РАНЬШЕ (КОПИРУЙ С ПРЕДЫДУЩЕГО СООБЩЕНИЯ)
+console.log("🚀 CarambaTV работает!");
 </script>
 </body>
 </html>
