@@ -10,9 +10,56 @@
       "views": 0,
       "likes": [],
       "timestamp": 1786364943741
+    },
+    {
+      "id": 2,
+      "title": "МУЛЬТИК",
+      "tags": "",
+      "url": "https://rutube.ru/video/ffd7562de069a9fd2b9a7a6f7976900d/?r=plwd",
+      "img": "https://rutube.ru/api/video/preview/ffd7562de069a9fd2b9a7a6f7976900d/?width=500",
+      "author": "artehkk",
+      "views": 1,
+      "likes": [],
+      "timestamp": 1786381815098
     }
   ],
-  "gifDB": [],
+  "gifDB": [
+    {
+      "id": 1,
+      "title": "бананчики",
+      "tags": "",
+      "url": "https://webelement.ru/old_webelement/mailing/images/2016.07.22/1/201607220003.gif",
+      "img": "https://webelement.ru/old_webelement/mailing/images/2016.07.22/1/201607220003.gif",
+      "author": "artehkk",
+      "views": 1,
+      "likes": [
+        "user"
+      ],
+      "timestamp": 1786381873357
+    },
+    {
+      "id": 2,
+      "title": "нян кэт",
+      "tags": "",
+      "url": "https://upload.wikimedia.org/wikipedia/ru/archive/6/6b/20210505175821%21NyanCat.gif",
+      "img": "https://upload.wikimedia.org/wikipedia/ru/archive/6/6b/20210505175821%21NyanCat.gif",
+      "author": "artehkk",
+      "views": 1,
+      "likes": [],
+      "timestamp": 1786381918541
+    },
+    {
+      "id": 3,
+      "title": "котэо",
+      "tags": "",
+      "url": "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZDl4ejV3aXBlbG8zaWRpYng3b3F1Y25lZG9wdm45ODk3eHJxaWxhaSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Ogy9H6ggNvHKo/200_d.gif",
+      "img": "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZDl4ejV3aXBlbG8zaWRpYng3b3F1Y25lZG9wdm45ODk3eHJxaWxhaSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Ogy9H6ggNvHKo/200_d.gif",
+      "author": "artehkk",
+      "views": 1,
+      "likes": [],
+      "timestamp": 1786382037647
+    }
+  ],
   "imageDB": [],
   "pollDB": [],
   "comments": {
