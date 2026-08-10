@@ -57,6 +57,7 @@
     .auth-top-btn:hover { background: #a01016; }
     .logout-btn { background: #444; border: none; padding: 6px 16px; color: #fff; font-weight: bold; font-size: 13px; cursor: pointer; border-radius: 2px; display: none; }
 
+    /* ===== КНОПКА СИНХРОНИЗАЦИИ ===== */
     .sync-btn {
         background: linear-gradient(to bottom, #2d8a4e, #1a5c33);
         border: 1px solid #3a9e5a;
@@ -67,6 +68,7 @@
         cursor: pointer;
         border-radius: 2px;
         transition: 0.2s;
+        display: inline-block;
     }
     .sync-btn:hover { background: linear-gradient(to bottom, #3a9e5a, #2d8a4e); }
     .sync-btn.syncing { opacity: 0.6; pointer-events: none; }
@@ -230,6 +232,7 @@
             </select>
             <button class="btn-soft" onclick="openRulesModal()">📜 Правила</button>
             <button class="btn-soft" onclick="openUploadModal()">📤 Загрузить</button>
+            <!-- ===== КНОПКА СИНХРОНИЗАЦИИ ===== -->
             <button class="sync-btn" onclick="syncWithGitHub()" id="syncBtn">🔄 Синхронизировать</button>
             <button class="auth-top-btn" id="loginBtn" onclick="openModal('login')" data-key="login">Вход</button>
             <button class="logout-btn" id="logoutBtn" onclick="logoutUser()" data-key="logout">Выход</button>
@@ -451,8 +454,7 @@ let currentLang = localStorage.getItem('carambaLang') || 'ru';
 
 console.log("📦 Загружено:", { videos: videoDB.length, gifs: gifDB.length, images: imageDB.length });
 
-// === ПЕРЕВОДЫ ===
-const LANG = {
+// === ПЕРЕВОДЫ ===const LANG = {
     ru: {
         navVideos: "Видео", navIssues: "Выпуски +-50", navPolls: "Опросы", navGifs: "Гифки", navImages: "Картинки", navVideoOfDay: "Видео дня",
         login: "Вход", logout: "Выход",
@@ -640,7 +642,6 @@ async function fetchDataFromGitHub() {
             console.log('✅ Данные загружены с GitHub!');
         }
 
-        // Загрузка пользователей
         try {
             const usersResponse = await fetch(GITHUB_USERS_URL + '?t=' + Date.now());
             if (usersResponse.ok) {
@@ -686,7 +687,6 @@ async function syncWithGitHub() {
         
         console.log('🔄 Отправка данных на GitHub...');
 
-        // Функция для получения SHA
         async function getFileSha(url) {
             try {
                 const resp = await fetch(url);
@@ -696,7 +696,6 @@ async function syncWithGitHub() {
             } catch { return null; }
         }
 
-        // Отправка videos.json
         const videoSha = await getFileSha(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/videos.json`);
         const videoResponse = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/videos.json`, {
             method: 'PUT',
@@ -718,7 +717,6 @@ async function syncWithGitHub() {
         }
         console.log('✅ videos.json отправлен');
 
-        // Отправка users.json
         const usersSha = await getFileSha(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/users.json`);
         const usersResponse = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/users.json`, {
             method: 'PUT',
@@ -757,7 +755,7 @@ async function syncWithGitHub() {
 }
 
 // ================================================================
-//  ОСНОВНЫЕ ФУНКЦИИ
+//  ОСТАЛЬНЫЕ ФУНКЦИИ (renderGrid, openPlayer, likeVideo и т.д.)
 // ================================================================
 
 function getTimeAgo(timestamp) {
