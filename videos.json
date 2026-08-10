@@ -14,5 +14,21 @@
   ],
   "gifDB": [],
   "imageDB": [],
-  "pollDB": []
+  "pollDB": [],
+  "comments": {
+    "1": [
+      {
+        "user": "artehkk",
+        "text": "примвеит",
+        "date": "10.08.2026, 17:42:13"
+      },
+      {
+        "user": "artehkk",
+        "text": "привеь",
+        "date": "10.08.2026, 17:42:42"
+      }
+    ]
+  },
+  "gifComments": {},
+  "imageComments": {}
 }
