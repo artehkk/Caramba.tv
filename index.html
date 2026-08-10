@@ -141,7 +141,6 @@ a{text-decoration:none;color:inherit}
 <div id="imageSection" style="display:none;"><div class="image-grid" id="imageGrid"></div></div>
 <div id="videoOfDaySection" style="display:none;"><div class="home-grid" id="videoOfDayGrid"></div></div>
 
-<!-- ПЛЕЕР ВИДЕО -->
 <div id="playerSection">
     <div class="player-container">
         <div class="player-wrapper"><div id="mainPlayerContainer" style="width:100%;height:100%;background:#000;"></div></div>
@@ -170,7 +169,6 @@ a{text-decoration:none;color:inherit}
     </div>
 </div>
 
-<!-- ПЛЕЕР ГИФОК -->
 <div id="gifPlayerSection">
     <div class="player-container">
         <div class="player-wrapper"><img id="gifPlayer" src="" alt="Гифка" style="width:100%;height:100%;object-fit:contain;background:#000;"></div>
@@ -196,7 +194,6 @@ a{text-decoration:none;color:inherit}
     </div>
 </div>
 
-<!-- ПЛЕЕР КАРТИНОК -->
 <div id="imagePlayerSection">
     <div class="player-container">
         <div class="player-wrapper"><img id="imagePlayer" src="" alt="Картинка" style="width:100%;height:100%;object-fit:contain;background:#000;"></div>
@@ -222,7 +219,6 @@ a{text-decoration:none;color:inherit}
     </div>
 </div>
 
-<!-- МОДАЛКИ -->
 <div class="modal-overlay" id="rulesModal">
     <div class="modal-box" style="width:400px;padding:20px;">
         <h3 style="color:#cc181e;">📜 Правила</h3>
@@ -300,6 +296,7 @@ let currentGifId = null;
 let currentImageId = null;
 let isRegisterMode = false;
 
+// === БАЗА ДАННЫХ ===
 let videoDB = JSON.parse(localStorage.getItem('carambaDB')) || [];
 let gifDB = JSON.parse(localStorage.getItem('carambaGifs')) || [];
 let imageDB = JSON.parse(localStorage.getItem('carambaImages')) || [];
@@ -321,6 +318,7 @@ let currentFilter = 'all';
 let sessionUser = localStorage.getItem('carambaSession');
 let currentLang = localStorage.getItem('carambaLang') || 'ru';
 
+// === ПЕРЕВОДЫ ===
 const LANG = {
     ru: {
         navVideos: "Видео", navIssues: "Выпуски +-50", navPolls: "Опросы", navGifs: "Гифки", navImages: "Картинки", navVideoOfDay: "Видео дня",
@@ -416,24 +414,29 @@ function isAdmin() { if(!sessionUser) return false; try { return JSON.parse(sess
 function getCurrentUser() { if(!sessionUser) return null; try { return JSON.parse(sessionUser); } catch { return null; } }
 function updateSubscribeButtons() { ['subBtn','gifSubBtn','imageSubBtn'].forEach(id => { const el = document.getElementById(id); if(el) { el.innerText = isSubscribed ? t('subBtnDone') : t('subBtn'); el.classList.toggle('subscribed', isSubscribed); } }); }
 
+// =============== СИНХРОНИЗАЦИЯ С GITHUB ===============
+
 async function fetchDataFromGitHub() {
     try {
+        console.log('🔄 Загрузка с GitHub...');
         const resp = await fetch(GITHUB_JSON_URL + '?t=' + Date.now());
-        if(!resp.ok) { renderGrid(); return; }
+        if(!resp.ok) { console.warn('GitHub не отвечает, использую локальные данные'); renderGrid(); return; }
         const data = await resp.json();
         if(data) {
             if(data.videoDB) { videoDB=data.videoDB; localStorage.setItem('carambaDB',JSON.stringify(videoDB)); }
             if(data.gifDB) { gifDB=data.gifDB; localStorage.setItem('carambaGifs',JSON.stringify(gifDB)); }
             if(data.imageDB) { imageDB=data.imageDB; localStorage.setItem('carambaImages',JSON.stringify(imageDB)); }
             if(data.pollDB) { pollDB=data.pollDB; localStorage.setItem('carambaPolls',JSON.stringify(pollDB)); }
-            if(data.comments) { comments=data.comments; localStorage.setItem('carambaComments',JSON.stringify(comments)); }
+            // ===== КОММЕНТАРИИ =====
+            if(data.comments) { comments=data.comments; localStorage.setItem('carambaComments',JSON.stringify(comments)); console.log('📥 Комментарии загружены:', Object.keys(comments).length); }
             if(data.gifComments) { gifComments=data.gifComments; localStorage.setItem('carambaGifComments',JSON.stringify(gifComments)); }
             if(data.imageComments) { imageComments=data.imageComments; localStorage.setItem('carambaImageComments',JSON.stringify(imageComments)); }
+            console.log('✅ Данные загружены с GitHub!');
         }
         const uResp = await fetch(GITHUB_USERS_URL + '?t=' + Date.now());
         if(uResp.ok) { const uData = await uResp.json(); if(uData && uData.users) { usersDB=uData.users; localStorage.setItem('carambaUsers',JSON.stringify(usersDB)); } }
         renderGrid();
-    } catch(e) { renderGrid(); }
+    } catch(e) { console.error('Ошибка загрузки:', e); renderGrid(); }
 }
 
 async function syncWithGitHub() {
@@ -448,29 +451,74 @@ async function syncWithGitHub() {
             if(!githubToken) { isSyncing=false; syncBtn.innerText=t('syncButton'); syncBtn.classList.remove('syncing'); return; }
             localStorage.setItem('githubToken', githubToken);
         }
-        const data = { videoDB, gifDB, imageDB, pollDB, comments, gifComments, imageComments };
+        
+        // ===== СОБИРАЕМ ВСЕ ДАННЫЕ =====
+        const data = { 
+            videoDB, 
+            gifDB, 
+            imageDB, 
+            pollDB,
+            comments,        // <--- КОММЕНТАРИИ
+            gifComments,     // <--- КОММЕНТАРИИ К ГИФКАМ
+            imageComments    // <--- КОММЕНТАРИИ К КАРТИНКАМ
+        };
         const usersData = { users: usersDB };
+        
+        console.log('📤 Отправка на GitHub...');
+        console.log('📝 Комментариев в comments:', Object.keys(comments).length);
         
         async function getFileSha(url) { try { const resp=await fetch(url); if(!resp.ok) return null; const json=await resp.json(); return json.sha||null; } catch { return null; } }
         
+        // Отправка videos.json
         const videoSha = await getFileSha(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/videos.json`);
         const vr = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/videos.json`, {
-            method:'PUT', headers:{'Authorization':`token ${githubToken}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},
-            body:JSON.stringify({message:'Update CarambaTV', content:btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2)))), sha:videoSha||undefined})
+            method:'PUT', 
+            headers:{'Authorization':`token ${githubToken}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},
+            body:JSON.stringify({
+                message:'Update CarambaTV data with comments', 
+                content:btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2)))), 
+                sha:videoSha||undefined
+            })
         });
-        if(!vr.ok) { const err=await vr.text(); if(vr.status===404) { const cr=await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/videos.json`, {method:'PUT',headers:{'Authorization':`token ${githubToken}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'}, body:JSON.stringify({message:'Create videos.json', content:btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))))}) }); if(!cr.ok) throw new Error('Create failed'); } else throw new Error(err); }
+        if(!vr.ok) { 
+            const err=await vr.text(); 
+            if(vr.status===404) { 
+                const cr=await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/videos.json`, {
+                    method:'PUT',
+                    headers:{'Authorization':`token ${githubToken}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'}, 
+                    body:JSON.stringify({
+                        message:'Create videos.json with comments', 
+                        content:btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))))
+                    })
+                }); 
+                if(!cr.ok) throw new Error('Create failed'); 
+            } else throw new Error(err); 
+        }
+        console.log('✅ videos.json отправлен');
         
+        // Отправка users.json
         const usersSha = await getFileSha(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/users.json`);
         const ur = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/users.json`, {
-            method:'PUT', headers:{'Authorization':`token ${githubToken}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},
-            body:JSON.stringify({message:'Update users', content:btoa(unescape(encodeURIComponent(JSON.stringify(usersData,null,2)))), sha:usersSha||undefined})
+            method:'PUT', 
+            headers:{'Authorization':`token ${githubToken}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},
+            body:JSON.stringify({
+                message:'Update users', 
+                content:btoa(unescape(encodeURIComponent(JSON.stringify(usersData,null,2)))), 
+                sha:usersSha||undefined
+            })
         });
         if(!ur.ok && ur.status!==404) console.warn('Users update error');
         
         alert(t('syncSuccess'));
-    } catch(e) { alert(t('syncError')+': '+e.message); if(e.message.includes('401')||e.message.includes('403')) { localStorage.removeItem('githubToken'); githubToken=null; } }
+        console.log('🎉 Синхронизация завершена!');
+    } catch(e) { 
+        alert(t('syncError')+': '+e.message); 
+        if(e.message.includes('401')||e.message.includes('403')) { localStorage.removeItem('githubToken'); githubToken=null; } 
+    }
     finally { isSyncing=false; syncBtn.innerText=t('syncButton'); syncBtn.classList.remove('syncing'); }
 }
+
+// =============== ОСТАЛЬНЫЕ ФУНКЦИИ ===============
 
 function getTimeAgo(t) { if(!t) return 'Неизвестно'; const d=Math.floor((Date.now()-t)/1000); if(d<60) return d+' сек'; if(d<3600) return Math.floor(d/60)+' мин'; if(d<86400) return Math.floor(d/3600)+' ч'; return Math.floor(d/86400)+' дн'; }
 
@@ -630,6 +678,8 @@ function openGifPlayer(id) { currentGifId=id; document.getElementById('homeSecti
 
 function openImagePlayer(id) { currentImageId=id; document.getElementById('homeSection').style.display='none'; document.getElementById('playerSection').style.display='none'; document.getElementById('gifPlayerSection').style.display='none'; document.getElementById('imagePlayerSection').style.display='block'; document.getElementById('videoOfDaySection').style.display='none'; document.getElementById('gifSection').style.display='none'; document.getElementById('imageSection').style.display='none'; loadImage(); }
 
+// =============== ПЛЕЕРЫ ===============
+
 function loadVideo() {
     const v = videoDB.find(v => v.id === currentVideoId);
     if (!v) return;
@@ -648,7 +698,6 @@ function loadVideo() {
     const url = v.url;
     const rutubeLink = document.getElementById('rutubeOpenLink');
     
-    // ПЫТАЕМСЯ ИЗВЛЕЧЬ ID ВИДЕО
     let videoId = null;
     if (url.includes('/video/')) {
         const match = url.match(/\/video\/([a-f0-9]+)/);
@@ -658,14 +707,14 @@ function loadVideo() {
         const match = url.match(/\/embed\/([a-f0-9]+)/);
         if (match) videoId = match[1];
     }
+    if (!videoId && url.match(/([a-f0-9]{32})/)) {
+        videoId = url.match(/([a-f0-9]{32})/)[1];
+    }
     
     if (videoId) {
-        // ПОКАЗЫВАЕМ ССЫЛКУ НА RuTube ДЛЯ ПЛАНШЕТА
         rutubeLink.style.display = 'inline-block';
         rutubeLink.href = `https://rutube.ru/video/${videoId}/`;
         rutubeLink.innerText = '📱 Открыть в RuTube (для планшета)';
-        
-        // ПЫТАЕМСЯ ВСТРОИТЬ ПЛЕЕР
         container.innerHTML = `
             <iframe 
                 src="https://rutube.ru/embed/${videoId}/" 
@@ -710,6 +759,8 @@ function loadImage() {
     document.getElementById('imageLikeCount').innerText=(img.likes||[]).length; const btn=document.getElementById('imageLikeBtn'); btn.classList.toggle('liked',likedImages.includes('img_'+img.id)); renderImageComments();
 }
 
+// =============== ЛАЙКИ ===============
+
 function likeVideo() {
     if(!currentVideoId) return; const v=videoDB.find(v=>v.id===currentVideoId); if(!v) return;
     const i=likedVideos.indexOf(v.id); if(i!==-1){likedVideos.splice(i,1); const ui=v.likes.indexOf("user"); if(ui!==-1) v.likes.splice(ui,1);} else { likedVideos.push(v.id); if(!v.likes) v.likes=[]; v.likes.push("user"); }
@@ -730,13 +781,81 @@ function likeImage() {
 
 function subscribe() { if(isSubscribed) return; isSubscribed=true; localStorage.setItem('carambaSubscribed',JSON.stringify(true)); updateSubscribeButtons(); alert(t('login')==='Login'?"Subscribed!":"Вы подписались!"); }
 
-function renderComments() { const list=document.getElementById('commentList'); list.innerHTML=''; if(!comments[currentVideoId]) return; comments[currentVideoId].forEach(c=>{ list.innerHTML+=`<div class="comment-item"><span class="user">${c.user}</span><span class="date">${c.date}</span><div class="text">${c.text}</div></div>`; }); }
-function renderGifComments() { const list=document.getElementById('gifCommentList'); list.innerHTML=''; if(!gifComments[currentGifId]) return; gifComments[currentGifId].forEach(c=>{ list.innerHTML+=`<div class="comment-item"><span class="user">${c.user}</span><span class="date">${c.date}</span><div class="text">${c.text}</div></div>`; }); }
-function renderImageComments() { const list=document.getElementById('imageCommentList'); list.innerHTML=''; if(!imageComments[currentImageId]) return; imageComments[currentImageId].forEach(c=>{ list.innerHTML+=`<div class="comment-item"><span class="user">${c.user}</span><span class="date">${c.date}</span><div class="text">${c.text}</div></div>`; }); }
+// =============== КОММЕНТАРИИ ===============
 
-function addComment() { const input=document.getElementById('commentInput'); const user=getCurrentUser(); if(!user) return alert(t('login')==='Login'?"Log in!":"Войдите!"); if(!input.value.trim()) return; if(!comments[currentVideoId]) comments[currentVideoId]=[]; comments[currentVideoId].push({user:user.name,text:input.value.trim(),date:new Date().toLocaleString()}); localStorage.setItem('carambaComments',JSON.stringify(comments)); input.value=''; renderComments(); }
-function addGifComment() { const input=document.getElementById('gifCommentInput'); const user=getCurrentUser(); if(!user) return alert(t('login')==='Login'?"Log in!":"Войдите!"); if(!input.value.trim()) return; if(!gifComments[currentGifId]) gifComments[currentGifId]=[]; gifComments[currentGifId].push({user:user.name,text:input.value.trim(),date:new Date().toLocaleString()}); localStorage.setItem('carambaGifComments',JSON.stringify(gifComments)); input.value=''; renderGifComments(); }
-function addImageComment() { const input=document.getElementById('imageCommentInput'); const user=getCurrentUser(); if(!user) return alert(t('login')==='Login'?"Log in!":"Войдите!"); if(!input.value.trim()) return; if(!imageComments[currentImageId]) imageComments[currentImageId]=[]; imageComments[currentImageId].push({user:user.name,text:input.value.trim(),date:new Date().toLocaleString()}); localStorage.setItem('carambaImageComments',JSON.stringify(imageComments)); input.value=''; renderImageComments(); }
+function renderComments() { 
+    const list=document.getElementById('commentList'); 
+    list.innerHTML=''; 
+    if(!comments[currentVideoId]) return; 
+    comments[currentVideoId].forEach(c=>{ 
+        list.innerHTML+=`<div class="comment-item"><span class="user">${c.user}</span><span class="date">${c.date}</span><div class="text">${c.text}</div></div>`; 
+    }); 
+}
+
+function renderGifComments() { 
+    const list=document.getElementById('gifCommentList'); 
+    list.innerHTML=''; 
+    if(!gifComments[currentGifId]) return; 
+    gifComments[currentGifId].forEach(c=>{ 
+        list.innerHTML+=`<div class="comment-item"><span class="user">${c.user}</span><span class="date">${c.date}</span><div class="text">${c.text}</div></div>`; 
+    }); 
+}
+
+function renderImageComments() { 
+    const list=document.getElementById('imageCommentList'); 
+    list.innerHTML=''; 
+    if(!imageComments[currentImageId]) return; 
+    imageComments[currentImageId].forEach(c=>{ 
+        list.innerHTML+=`<div class="comment-item"><span class="user">${c.user}</span><span class="date">${c.date}</span><div class="text">${c.text}</div></div>`; 
+    }); 
+}
+
+function addComment() { 
+    const input=document.getElementById('commentInput'); 
+    const user=getCurrentUser(); 
+    if(!user) return alert(t('login')==='Login'?"Log in!":"Войдите!"); 
+    if(!input.value.trim()) return; 
+    if(!comments[currentVideoId]) comments[currentVideoId]=[]; 
+    comments[currentVideoId].push({user:user.name,text:input.value.trim(),date:new Date().toLocaleString()}); 
+    localStorage.setItem('carambaComments',JSON.stringify(comments)); 
+    input.value=''; 
+    renderComments(); 
+    // Автосинхронизация комментариев после добавления
+    setTimeout(() => {
+        if(githubToken) {
+            console.log('🔄 Автосинхронизация комментариев...');
+            syncWithGitHub();
+        }
+    }, 2000);
+}
+
+function addGifComment() { 
+    const input=document.getElementById('gifCommentInput'); 
+    const user=getCurrentUser(); 
+    if(!user) return alert(t('login')==='Login'?"Log in!":"Войдите!"); 
+    if(!input.value.trim()) return; 
+    if(!gifComments[currentGifId]) gifComments[currentGifId]=[]; 
+    gifComments[currentGifId].push({user:user.name,text:input.value.trim(),date:new Date().toLocaleString()}); 
+    localStorage.setItem('carambaGifComments',JSON.stringify(gifComments)); 
+    input.value=''; 
+    renderGifComments(); 
+    setTimeout(() => { if(githubToken) syncWithGitHub(); }, 2000);
+}
+
+function addImageComment() { 
+    const input=document.getElementById('imageCommentInput'); 
+    const user=getCurrentUser(); 
+    if(!user) return alert(t('login')==='Login'?"Log in!":"Войдите!"); 
+    if(!input.value.trim()) return; 
+    if(!imageComments[currentImageId]) imageComments[currentImageId]=[]; 
+    imageComments[currentImageId].push({user:user.name,text:input.value.trim(),date:new Date().toLocaleString()}); 
+    localStorage.setItem('carambaImageComments',JSON.stringify(imageComments)); 
+    input.value=''; 
+    renderImageComments(); 
+    setTimeout(() => { if(githubToken) syncWithGitHub(); }, 2000);
+}
+
+// =============== АВТОРИЗАЦИЯ ===============
 
 function openModal(mode) { isRegisterMode=(mode==='register'); document.getElementById('modalTitle').innerText=isRegisterMode?t('modalRegister'):t('modalLogin'); document.getElementById('modalActionBtn').innerText=isRegisterMode?t('modalRegisterBtn'):t('modalLoginBtn'); document.getElementById('modalToggleText').innerText=isRegisterMode?t('modalToggleRegister'):t('modalToggleLogin'); document.getElementById('authModal').style.display='flex'; document.getElementById('loginUser').value=''; document.getElementById('loginPass').value=''; }
 function closeModal() { document.getElementById('authModal').style.display='none'; }
@@ -754,6 +873,8 @@ function loginUser() {
     if(usersDB.find(x=>x.login===u&&x.pass===btoa(p))) { closeModal(); setSession(u,false); alert(t('login')==='Login'?"Login successful!":"Вход выполнен!"); location.reload(); return; }
     alert(t('login')==='Login'?"Invalid login/password!":"Неверный логин или пароль!");
 }
+
+// =============== ЗАГРУЗКА КОНТЕНТА ===============
 
 function openUploadModal() { document.getElementById('uploadModal').style.display='flex'; document.getElementById('uploadTitle').value=''; document.getElementById('uploadTags').value=''; document.getElementById('uploadImg').value=''; document.getElementById('manualUrl').value=''; }
 function closeUploadModal() { document.getElementById('uploadModal').style.display='none'; }
@@ -775,6 +896,8 @@ function addContentFromModal() {
     if(type==='gif') showGifs(); else if(type==='image') showImages(); else goHome();
 }
 
+// =============== УДАЛЕНИЕ ===============
+
 function deleteContent(id) {
     if(!isAdmin()) { alert("⛔ Только админ!"); return; }
     if(!confirm("Удалить?")) return;
@@ -782,6 +905,8 @@ function deleteContent(id) {
     else if(typeof id==='string'&&id.startsWith('img_')) { const iid=parseInt(id.replace('img_','')); imageDB=imageDB.filter(i=>i.id!==iid); localStorage.setItem('carambaImages',JSON.stringify(imageDB)); showImages(); }
     else { const vid=parseInt(id); videoDB=videoDB.filter(v=>v.id!==vid); localStorage.setItem('carambaDB',JSON.stringify(videoDB)); goHome(); }
 }
+
+// =============== ОПРОСЫ ===============
 
 function votePoll(pollId) { const poll=pollDB.find(p=>'poll_'+p.id===pollId); if(!poll) return; const sel=document.querySelector(`input[name="poll_${pollId}"]:checked`); if(!sel) return alert("Выберите вариант!"); if(votedPolls.includes(pollId)) { alert("Вы уже голосовали!"); return; } poll.votes[parseInt(sel.value)]+=1; votedPolls.push(pollId); localStorage.setItem('carambaPolls',JSON.stringify(pollDB)); localStorage.setItem('carambaVotedPolls',JSON.stringify(votedPolls)); document.getElementById(`result_${pollId}`).innerText="Голосов: "+poll.votes.reduce((a,b)=>a+b,0); alert("Голос учтен!"); }
 
@@ -794,6 +919,8 @@ function addPollToDB() {
     alert("Опрос опубликован!");
     document.getElementById('pollQuestionInput').value=''; document.getElementById('pollOpt1').value=''; document.getElementById('pollOpt2').value=''; document.getElementById('pollOpt3').value=''; goHome();
 }
+
+// =============== ПРОФИЛЬ ===============
 
 function openProfileModal() {
     const user=getCurrentUser(); if(!user) return alert("Не авторизован!");
@@ -809,6 +936,8 @@ function openProfileModal() {
 }
 function closeProfileModal() { document.getElementById('profileModal').style.display='none'; }
 function requestBadge() { const user=getCurrentUser(); if(!user) return; ticketDB.push({user:user.name,status:'pending'}); localStorage.setItem('carambaTickets',JSON.stringify(ticketDB)); closeProfileModal(); alert(t('badgeRequestSent')); }
+
+// =============== АДМИНКА ===============
 
 function openAdminModal(type) {
     const content=document.getElementById('adminModalContent');
@@ -837,6 +966,8 @@ function rejectBadge(user) { const idx=ticketDB.findIndex(t=>t.user===user&&t.st
 function openRulesModal() { document.getElementById('rulesModal').style.display='flex'; }
 function closeRulesModal() { document.getElementById('rulesModal').style.display='none'; }
 
+// =============== ЭКСПОРТ ===============
+
 window.goHome=goHome; window.showGifs=showGifs; window.showImages=showImages; window.showVideoOfDay=showVideoOfDay; window.filterCategory=filterCategory;
 window.openPlayer=openPlayer; window.openGifPlayer=openGifPlayer; window.openImagePlayer=openImagePlayer; window.handleSearch=handleSearch;
 window.likeVideo=likeVideo; window.likeGif=likeGif; window.likeImage=likeImage; window.subscribe=subscribe;
@@ -849,6 +980,8 @@ window.openAdminModal=openAdminModal; window.closeAdminModal=closeAdminModal; wi
 window.openRulesModal=openRulesModal; window.closeRulesModal=closeRulesModal; window.switchLang=switchLang; window.syncWithGitHub=syncWithGitHub;
 window.deleteVideo=(id)=>{deleteContent(id);}; window.deleteGif=(id)=>{deleteContent('gif_'+id);}; window.deleteImage=(id)=>{deleteContent('img_'+id);};
 
+// =============== ЗАПУСК ===============
+
 document.getElementById('langSelect').value=currentLang;
 applyLang();
 checkSession();
@@ -858,6 +991,7 @@ document.getElementById('userDisplay').addEventListener('click', function() {
 });
 
 fetchDataFromGitHub();
+console.log('🚀 CarambaTV готов!');
 </script>
 </body>
 </html>
