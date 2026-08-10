@@ -2,14 +2,14 @@
   "videoDB": [
     {
       "id": 1,
-      "title": "2228",
+      "title": "2282",
       "tags": "",
-      "url": "https://rutube.ru/embed/ec3450047bd1e1abd2ffb702865bed29/",
-      "img": "https://via.placeholder.com/320x180/222/555?text=Video",
+      "url": "https://rutube.ru/video/ec3450047bd1e1abd2ffb702865bed29/?r=plwd",
+      "img": "https://rutube.ru/video/ec3450047bd1e1abd2ffb702865bed29/?r=plwd",
       "author": "artehkk",
       "views": 0,
       "likes": [],
-      "timestamp": 1786364943741
+      "timestamp": 1786365192008
     }
   ],
   "gifDB": [],
