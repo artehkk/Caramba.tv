@@ -2,33 +2,20 @@
   "videoDB": [
     {
       "id": 1,
-      "title": "2282",
+      "title": "2228",
       "tags": "",
-      "url": "https://rutube.ru/video/ec3450047bd1e1abd2ffb702865bed29/?r=plwd",
-      "img": "https://rutube.ru/video/ec3450047bd1e1abd2ffb702865bed29/?r=plwd",
+      "url": "https://rutube.ru/embed/ec3450047bd1e1abd2ffb702865bed29/",
+      "img": "https://via.placeholder.com/320x180/222/555?text=Video",
       "author": "artehkk",
       "views": 0,
       "likes": [],
-      "timestamp": 1786365192008
+      "timestamp": 1786364943741
     }
   ],
   "gifDB": [],
   "imageDB": [],
   "pollDB": [],
-  "comments": {
-    "1": [
-      {
-        "user": "artehkk",
-        "text": "примвеит",
-        "date": "10.08.2026, 17:42:13"
-      },
-      {
-        "user": "artehkk",
-        "text": "привеь",
-        "date": "10.08.2026, 17:42:42"
-      }
-    ]
-  },
+  "comments": {},
   "gifComments": {},
   "imageComments": {}
 }
