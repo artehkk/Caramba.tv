@@ -15,7 +15,15 @@
   "gifDB": [],
   "imageDB": [],
   "pollDB": [],
-  "comments": {},
+  "comments": {
+    "1": [
+      {
+        "user": "artehkk",
+        "text": "привует",
+        "date": "10.08.2026, 17:57:58"
+      }
+    ]
+  },
   "gifComments": {},
   "imageComments": {}
 }
