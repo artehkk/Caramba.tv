@@ -71,6 +71,14 @@
       }
     ]
   },
-  "gifComments": {},
+  "gifComments": {
+    "2": [
+      {
+        "user": "artehkk",
+        "text": "привет",
+        "date": "11.08.2026, 11:57:52"
+      }
+    ]
+  },
   "imageComments": {}
 }
